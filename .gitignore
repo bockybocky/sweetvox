@@ -13,6 +13,6 @@ sep/.venv/
 sep/models/
 sep/out*/
 sep/work/
-vst/
 test/
 *.wav
+app/state.json

@@ -5,10 +5,11 @@
 用法:
   C:\\Users\\Administrator\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe tools\\verify_female_control.py
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import importlib.util, json, os
 
-APP = r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py"
-STATE = r"E:\AI\workspace\vocal_focus\app\state.json"
+APP = _os.path.join(_ROOT, r"app\vocal_focus_gui.py")
+STATE = _os.path.join(_ROOT, r"app\state.json")
 LIVE = r"C:\Program Files\EqualizerAPO\config\sweetvox_custom.txt"
 
 spec = importlib.util.spec_from_file_location("g", APP)

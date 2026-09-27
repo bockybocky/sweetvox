@@ -1,13 +1,13 @@
 /*!
  * 甜嗓 SweetVox — 網頁版（女聲前移 · 通透 · 真空管暖度）
- * 版本 1.0.0 ｜ 2026-09-23 ｜ 工作資料夾 E:\AI\workspace\vocal_focus\web\
+ * 版本 1.0.0 ｜ 2026-09-23 ｜ 工作資料夾 web/
  *
  * 一般 <script defer> 載入即可，不用 ES module、不用任何外部套件、不發任何網路請求。
  *
  *   <div data-lab-demo="sweetvox" data-lang="zh-TW"></div>
  *   <script defer src="sweetvox.js"></script>
  *
- * 處理鏈跟桌面版 E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py 的 build_config() 一致：
+ * 處理鏈跟桌面版 app/vocal_focus_gui.py 的 build_config() 一致：
  *   <audio> → MediaElementSource → 拆 MID／SIDE → 各自處理 → 還原 L/R → 全域 Preamp → 輸出
  * 音訊全程在你的瀏覽器裡處理，不上傳、不連外。
  *

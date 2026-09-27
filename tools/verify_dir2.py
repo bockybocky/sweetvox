@@ -3,11 +3,12 @@
 """A/B 驗證（乾淨管線版）：套用兩組參數，各自用固定種子白噪音側錄 M-DAC 輸出。
 用法: python verify_dir2.py <標籤1> <json1> <標籤2> <json2> [每組錄幾次]
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import importlib.util, json, os, subprocess, sys, time
 
-APP    = r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py"
-PLAYER = r"E:\AI\workspace\vocal_focus\tools\lb_play2.py"
-OUTDIR = r"E:\AI\workspace\vocal_focus\test"
+APP    = _os.path.join(_ROOT, r"app\vocal_focus_gui.py")
+PLAYER = _os.path.join(_ROOT, r"tools\lb_play2.py")
+OUTDIR = _os.path.join(_ROOT, r"test")
 
 spec = importlib.util.spec_from_file_location("gui", APP)
 g = importlib.util.module_from_spec(spec); spec.loader.exec_module(g)

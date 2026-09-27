@@ -1,7 +1,7 @@
 // 驗證「甜嗓曲線產生器.html」：不開瀏覽器，用最小 DOM 替身把頁面 JS 真的跑一遍。
 // 用法: node tools/verify_curve_page.js
 const fs = require('fs');
-const path = 'E:/AI/workspace/vocal_focus/phone/甜嗓曲線產生器.html';
+const path = require('path').join(__dirname, '..', 'phone', '甜嗓曲線產生器.html');
 const html = fs.readFileSync(path, 'utf8');
 const script = html.split('<script>')[1].split('</script>')[0];
 

@@ -1,11 +1,12 @@
 """介面版面自檢：把調整台開起來（不顯示在螢幕上），檢查有沒有元件被視窗切掉。
 用法: sep/.venv/Scripts/python.exe tools/check_layout.py   （hermes venv 的 python 也可）
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import importlib.util
 import tkinter as tk
 
 spec = importlib.util.spec_from_file_location(
-    "g", r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py")
+    "g", _os.path.join(_ROOT, r"app\vocal_focus_gui.py"))
 g = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(g)
 

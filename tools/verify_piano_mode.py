@@ -10,10 +10,11 @@
 用法:
   C:\\Users\\Administrator\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe tools\\verify_piano_mode.py
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import hashlib, importlib.util, json, os, re, shutil, tkinter as tk
 
-SRC      = r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py"
-STATE    = r"E:\AI\workspace\vocal_focus\app\state.json"
+SRC      = _os.path.join(_ROOT, r"app\vocal_focus_gui.py")
+STATE    = _os.path.join(_ROOT, r"app\state.json")
 LIVE_APO = r"C:\Program Files\EqualizerAPO\config\sweetvox_custom.txt"
 LIVE_CFG = r"C:\Program Files\EqualizerAPO\config\config.txt"
 TMP      = r"C:\Users\Administrator\AppData\Local\Temp\svx_probe"
@@ -37,7 +38,7 @@ src = open(SRC, encoding="utf-8").read()
 reps = [
     ('APO_DIR   = r"C:\\Program Files\\EqualizerAPO\\config"', f'APO_DIR   = r"{PROBE_APO}"'),
     ('STATE     = os.path.join(HERE, "state.json")',          f'STATE     = r"{PROBE_STATE}"'),
-    ('EXPORT    = r"E:\\AI\\workspace\\vocal_focus"',          f'EXPORT    = r"{TMP}"'),
+    ('EXPORT    = ROOT',          f'EXPORT    = r"{TMP}"'),
 ]
 probe = src
 for a, b in reps:

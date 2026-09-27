@@ -2,6 +2,7 @@
 用途：證明「深夜」模式真的砍掉穿牆的低頻、抬起人聲清晰度，而不是靠感覺。
 用法: sep/.venv/Scripts/python.exe tools/compare_presets_bands.py 中 深夜
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import importlib.util, json, os, sys
 import numpy as np
 import soundfile as sf
@@ -9,14 +10,14 @@ import soundfile as sf
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import measure_tube as mt
 
-SONG = r"E:\AI\workspace\vocal_focus\sep\work\song_40s.wav"
+SONG = _os.path.join(_ROOT, r"sep\work\song_40s.wav")
 BANDS = [(20, 40), (40, 60), (60, 85), (85, 120), (120, 250), (250, 500), (500, 1000),
          (1000, 2000), (2000, 4000), (4000, 8000), (8000, 16000)]
 
 
 def load_gui():
     spec = importlib.util.spec_from_file_location(
-        "g", r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py")
+        "g", _os.path.join(_ROOT, r"app\vocal_focus_gui.py"))
     g = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(g)
     return g
@@ -24,7 +25,7 @@ def load_gui():
 
 def render(g, preset, out):
     st = dict(g.DEFAULTS)
-    p = r"E:\AI\workspace\vocal_focus\app\state.json"
+    p = _os.path.join(_ROOT, r"app\state.json")
     if os.path.exists(p):
         st.update(json.load(open(p, encoding="utf-8")))
     if preset != "現在":

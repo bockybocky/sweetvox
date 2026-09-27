@@ -3,14 +3,15 @@
 
 用法: python measure_tube.py            # 量 無真空管 / 真空管-全鏈 / 真空管-只正中 三種
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import importlib.util, json, os, re, subprocess, sys
 import numpy as np
 import soundfile as sf
 
 BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 CFG = r"C:\Program Files\EqualizerAPO\config\vocal_focus_custom.txt"
-WORK = r"E:\AI\workspace\vocal_focus\test"
-VSTDIR = r"E:\AI\workspace\vocal_focus\vst\airwindows\WinVST64s"
+WORK = _os.path.join(_ROOT, r"test")
+VSTDIR = _os.path.join(_ROOT, r"vst\airwindows\WinVST64s")
 FS = 44100.0
 TUBES = ["Tube264.dll", "Tube64.dll", "TubeDesk64.dll"]
 
@@ -69,11 +70,11 @@ def latency(d):
 
 def load_base():
     spec = importlib.util.spec_from_file_location(
-        "g", r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py")
+        "g", _os.path.join(_ROOT, r"app\vocal_focus_gui.py"))
     g = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(g)
     st = dict(g.DEFAULTS)
-    p = r"E:\AI\workspace\vocal_focus\app\state.json"
+    p = _os.path.join(_ROOT, r"app\state.json")
     if os.path.exists(p):
         st.update(json.load(open(p, encoding="utf-8")))
     st["on"] = True

@@ -10,13 +10,14 @@
     python verify_live_chain.py [--tag 發燒]
 輸出：E:\\AI\\workspace\\vocal_focus\\VERIFY_live_<tag>.json ＋ 螢幕對照 2026-09-25 的實測值
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import argparse, datetime, hashlib, json, os, re, subprocess, sys
 import numpy as np, soundfile as sf
 
 BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 APO   = r"C:\Program Files\EqualizerAPO\config"
-WORK  = r"E:\AI\workspace\vocal_focus\test\liveverify"
-HOME  = r"E:\AI\workspace\vocal_focus"
+WORK  = _os.path.join(_ROOT, r"test\liveverify")
+HOME  = _ROOT
 SR    = 96000
 
 # 2026-09-25 同值實測（MEASURE_final_20260925.json 的 B 發燒模式）

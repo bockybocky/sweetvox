@@ -9,11 +9,12 @@
 
 判準（發燒友等級）：重新組合殘差 ≤ −100 dBFS、對齊誤差 0 樣本、THD < 0.01%、音量變化 0 dB。
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import argparse, json, os, subprocess, sys
 import numpy as np
 import soundfile as sf
 
-HERE = r"E:\AI\workspace\vocal_focus"
+HERE = _ROOT
 BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 
 ap = argparse.ArgumentParser()

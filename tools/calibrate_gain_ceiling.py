@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """校準「整體音量補償」的安全上限：對每個 gain 值跑一次滿刻度掃頻，看峰值有沒有超過 −0.5 dBFS。"""
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import hashlib, importlib.util, json, os, re, subprocess
 import numpy as np
 
-HERE = r"E:\AI\workspace\vocal_focus"
+HERE = _ROOT
 BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 APO = r"C:\Program Files\EqualizerAPO\config\config.txt"
 INC = r"C:\Program Files\EqualizerAPO\config\sweetvox_bench.txt"

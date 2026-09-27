@@ -12,9 +12,10 @@
     python set_preset.py 發燒                  # 套用（備份 state 與 live 檔）
     python set_preset.py 發燒 --launch         # 套用 ＋ 開調整台
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import argparse, datetime, hashlib, importlib.util, json, os, shutil, subprocess, sys, time
 
-APP   = r"E:\AI\workspace\vocal_focus\app"
+APP   = _os.path.join(_ROOT, r"app")
 GUI   = os.path.join(APP, "vocal_focus_gui.py")
 STATE = os.path.join(APP, "state.json")
 APO   = r"C:\Program Files\EqualizerAPO\config"

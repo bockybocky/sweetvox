@@ -4,12 +4,13 @@
 用法: python verify_dir.py <標籤1> <參數json> <標籤2> <參數json>
 例:  python verify_dir.py old '{"sweet":2.5,"air":-1.5}' new '{"sweet":1.2,"air":1.5}'
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import importlib.util, json, os, subprocess, sys, time
 
-APP = r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py"
-PINK = r"E:\AI\workspace\vocal_focus\test\pink96.wav"
-OUTDIR = r"E:\AI\workspace\vocal_focus\test"
-PLAYER = r"E:\AI\workspace\vocal_focus\tools\lb_play.py"
+APP = _os.path.join(_ROOT, r"app\vocal_focus_gui.py")
+PINK = _os.path.join(_ROOT, r"test\pink96.wav")
+OUTDIR = _os.path.join(_ROOT, r"test")
+PLAYER = _os.path.join(_ROOT, r"tools\lb_play.py")
 
 spec = importlib.util.spec_from_file_location("gui", APP)
 g = importlib.util.module_from_spec(spec); spec.loader.exec_module(g)

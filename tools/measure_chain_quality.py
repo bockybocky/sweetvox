@@ -9,11 +9,12 @@
 用法:
   tools/measure_chain_quality.py            # 量：他的現在的鏈 / 去掉飽和外掛 / 只有拆中側 三種
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import hashlib, importlib.util, json, os, shutil, subprocess, sys
 import numpy as np
 import soundfile as sf
 
-HERE = r"E:\AI\workspace\vocal_focus"
+HERE = _ROOT
 BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 APO_CFG_DIR = r"C:\Program Files\EqualizerAPO\config"
 APO_CONFIG = os.path.join(APO_CFG_DIR, "config.txt")

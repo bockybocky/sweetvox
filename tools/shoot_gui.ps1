@@ -1,4 +1,4 @@
-Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+﻿Add-Type -AssemblyName System.Windows.Forms, System.Drawing
 # 宣告 DPI 感知，否則截圖會被系統放大重畫（拍出來的字會糊、視窗也會對不上位置）
 Add-Type -TypeDefinition @'
 using System;
@@ -33,7 +33,7 @@ $w = $r.Right - $r.Left; $ht = $r.Bottom - $r.Top
 $bmp = New-Object System.Drawing.Bitmap $w, $ht
 $g = [System.Drawing.Graphics]::FromImage($bmp)
 $g.CopyFromScreen($r.Left, $r.Top, 0, 0, $bmp.Size)
-$out = "E:\AI\workspace\vocal_focus\gui_sweetvox.png"
+$out = Join-Path (Split-Path $PSScriptRoot -Parent) "gui_sweetvox.png"
 $bmp.Save($out, [System.Drawing.Imaging.ImageFormat]::Png)
 $g.Dispose(); $bmp.Dispose()
 Write-Output "$out  ($w x $ht)"

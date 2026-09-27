@@ -2,6 +2,7 @@
 輸出：phone/甜嗓_手機EQ.txt（10 段圖形 EQ ＋ 參數式 EQ 兩種格式，Wavelet/JamesDSP/Poweramp/Qudelix 都能用）
 用法: sep/.venv/Scripts/python.exe tools/make_phone_eq.py
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import os
 
 import numpy as np
@@ -64,7 +65,7 @@ def main():
         print(f"   {f:>6d} Hz : {d:+5.1f}")
     print(f"\n整條曲線最大增益 {peak:+.1f} dB（給播放器的 Preamp 就填 -{max(peak,0):.1f} dB，避免爆音）")
 
-    out_dir = r"E:\AI\workspace\vocal_focus\phone"
+    out_dir = _os.path.join(_ROOT, r"phone")
     os.makedirs(out_dir, exist_ok=True)
     p = os.path.join(out_dir, "甜嗓_手機EQ.txt")
     with open(p, "w", encoding="utf-8") as f:

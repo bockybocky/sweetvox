@@ -1,6 +1,7 @@
 """截圖客觀檢查：拉桿拉柄看不看得見、字銳不銳利（用數字判斷，不靠眼睛）。
 用法: sep/.venv/Scripts/python.exe tools/check_gui_pixels.py <png>
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import sys
 
 import numpy as np
@@ -17,7 +18,7 @@ TROUGH = (0x0B, 0x0C, 0x10)   # 滑桿槽
 
 
 def main():
-    p = sys.argv[1] if len(sys.argv) > 1 else r"E:\AI\workspace\vocal_focus\gui_sweetvox.png"
+    p = sys.argv[1] if len(sys.argv) > 1 else _os.path.join(_ROOT, r"gui_sweetvox.png")
     if not HAVE_PIL:
         print("沒有 PIL，無法讀 PNG")
         return

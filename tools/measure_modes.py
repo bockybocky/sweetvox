@@ -8,11 +8,12 @@
 用法:
   sep/.venv/Scripts/python.exe tools/measure_modes.py
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import hashlib, importlib.util, json, os, re, subprocess, sys, time
 import numpy as np
 import soundfile as sf
 
-HERE = r"E:\AI\workspace\vocal_focus"
+HERE = _ROOT
 BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 APO_CFG_DIR = r"C:\Program Files\EqualizerAPO\config"
 APO_CONFIG = os.path.join(APO_CFG_DIR, "config.txt")

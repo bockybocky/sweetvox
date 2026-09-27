@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """診斷：Device: Benchmark 條件區塊現在還生不生效？（找為什麼五組量到一樣）"""
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import hashlib, os, subprocess, shutil
 import numpy as np, soundfile as sf
 
@@ -8,7 +9,7 @@ BENCH = r"C:\Program Files\EqualizerAPO\Benchmark.exe"
 DIR = r"C:\Program Files\EqualizerAPO\config"
 CFG = os.path.join(DIR, "config.txt")
 INC = os.path.join(DIR, "sweetvox_bench.txt")
-WORK = r"E:\AI\workspace\vocal_focus\test"
+WORK = _os.path.join(_ROOT, r"test")
 SR = 96000
 IN = os.path.join(WORK, "q3_music.wav")
 

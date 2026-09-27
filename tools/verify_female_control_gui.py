@@ -6,10 +6,11 @@
 用法:
   C:\\Users\\Administrator\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe tools\\verify_female_control_gui.py
 """
+import os as _os; _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))  # 倉庫根目錄
 import hashlib, json, os, shutil, time, tkinter as tk
 
-SRC      = r"E:\AI\workspace\vocal_focus\app\vocal_focus_gui.py"
-STATE    = r"E:\AI\workspace\vocal_focus\app\state.json"
+SRC      = _os.path.join(_ROOT, r"app\vocal_focus_gui.py")
+STATE    = _os.path.join(_ROOT, r"app\state.json")
 LIVE_APO = r"C:\Program Files\EqualizerAPO\config\sweetvox_custom.txt"
 LIVE_CFG = r"C:\Program Files\EqualizerAPO\config\config.txt"
 TMP      = r"C:\Users\Administrator\AppData\Local\Temp\svx_probe"

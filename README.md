@@ -52,36 +52,35 @@
 
 ## 安裝
 
-1. 安裝 Equalizer APO 1.4.2 官方版，裝置選你的輸出音效卡。
-2. 用 Python 3.11 跑 `app/vocal_focus_gui.py`（`app/啟動甜嗓.cmd` 裡的 Python 路徑請改成你自己的）。
-3. 介面會把設定寫到 `C:\Program Files\EqualizerAPO\config\sweetvox_custom.txt`，
-   並在 `config.txt` 加一行 `Include: sweetvox_custom.txt`，即時生效。
-4. 關掉效果：介面按「切回原聲」，或在 `config.txt` 那行前面加 `#`。
+要用的東西都在這個倉庫裡，只有 Python 要自己裝。
 
-`sweetvox_custom.txt` 是目前使用中的一份設定範例。
+1. **下載**：按這一頁右上角綠色的 `Code` → `Download ZIP`，解壓縮到任何資料夾。
+2. **裝 Equalizer APO**（系統層等化器，甜嗓靠它改聲音）：執行 `installer/EqualizerAPO-x64-1.4.2.exe`。
+   安裝途中會跳出裝置清單，**勾你聽音樂用的喇叭或音效卡**，按確定。照提示重新開機。
+3. **裝 Python**：到 [python.org](https://www.python.org/downloads/) 下載 3.10 以上，安裝第一個畫面**勾選「Add python.exe to PATH」**。
+4. **（選配）** 想用「實測 5 秒」量女聲比伴奏大多少：在解壓縮的資料夾開命令列，打 `pip install -r requirements.txt`。不裝其他功能照常。
+5. **開調整台**：雙擊 `app/啟動甜嗓.cmd`，Windows 會問要不要允許修改，按「是」（要寫 Equalizer APO 的設定檔）。
 
-### 要改的地方
+之後每次想用，只要做第 5 步。
 
-程式預設找名稱含 `Audiolab` / `M-DAC` 的裝置（作者的音效卡）做側錄量測。
-換成你的裝置：改 `app/vocal_focus_gui.py` 的 `LOOPBACK_KEY`，以及 `tools/lb_*.py` 裡的裝置名稱。
+### 倉庫裡附了什麼
 
-### 真空管暖度與 Air（兩個選配外掛）
-
-調整台下半部有兩個勾選項，靠另外兩個小外掛（附加的聲音處理程式）做出來：
-
-| 勾選項 | 用哪個外掛 | 聽起來 |
+| 路徑 | 是什麼 | 授權 |
 |---|---|---|
-| 真空管暖度 | Airwindows `PurestWarm64.dll` | 聲音多一點溫暖的厚度，像老式真空管音響 |
-| 通透：加 Airwindows Air | Airwindows `Air64.dll` | 高音更亮、更有空氣感 |
+| `installer/EqualizerAPO-x64-1.4.2.exe` | Equalizer APO 官方安裝檔，檢查碼與 SourceForge 公布的一致（MD5 `410aab9749ae4673b950bc29a4eb226f`） | GPL-2.0，原始碼在 [SourceForge](https://sourceforge.net/p/equalizerapo/code/) |
+| `vst/airwindows/WinVST64s/PurestWarm64.dll` | 「真空管暖度」用的外掛：聲音多一點溫暖的厚度 | MIT（Airwindows，`vst/airwindows/LICENSE.txt`） |
+| `vst/airwindows/WinVST64s/Air64.dll` | 「通透：加 Air」用的外掛：高音更亮 | MIT（同上） |
 
-這兩個外掛是 Airwindows 做的，免費、MIT 授權。本倉庫沒有附，要自己裝：
+兩個外掛程式會自己找到，不用改路徑。
 
-1. 到 Airwindows 官方（[airwindows.com](https://www.airwindows.com/) 或 GitHub [airwindows/airwindows](https://github.com/airwindows/airwindows)）下載 Windows 64 位元的 VST 版本。
-2. 找到 `PurestWarm64.dll` 和 `Air64.dll`，放在你想放的資料夾。
-3. 打開 `app/vocal_focus_gui.py`，把第 55 行 `VST_AIR` 和第 57 行 `VST_WARM` 的路徑改成你放的位置。
+### 調整台做了什麼
 
-**不裝也能用。** 注意：真空管在程式預設裡是**開的**，「深夜甜嗓」模式也會打開它。沒裝外掛的話，請把「真空管暖度」的勾拿掉。
-「發燒」和「鋼琴（發燒）」兩個模式完全不用這兩個外掛，最乾淨。
+介面把設定寫到 `C:\Program Files\EqualizerAPO\config\sweetvox_custom.txt`，
+並在 `config.txt` 加一行 `Include: sweetvox_custom.txt`，即時生效。
+想完全停掉：介面按「切回原聲」，或在 `config.txt` 那行前面加 `#`。
+`sweetvox_custom.txt`（倉庫根目錄那份）是一份設定範例。
+
+「實測 5 秒」會先找名稱含 `Audiolab` 的音效卡（作者的），找不到就用 Windows 預設喇叭。
 
 ## 已知限制
 
@@ -98,6 +97,8 @@
 | `phone/` | 手機等化曲線 |
 | `tools/` | 量測、驗收、裝置選擇腳本 |
 | `sep/live.py` | 即時人聲分離實驗（模型不附） |
+| `installer/` | Equalizer APO 安裝檔 |
+| `vst/airwindows/` | 兩個 Airwindows 外掛與授權 |
 | `vocal_focus_*.txt` | 第一版三段固定設定（light／med／strong） |
 
 ## 授權

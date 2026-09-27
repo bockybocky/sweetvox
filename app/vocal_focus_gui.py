@@ -48,13 +48,14 @@ CUSTOM    = os.path.join(APO_DIR, "sweetvox_custom.txt")
 CONFIG_TXT = os.path.join(APO_DIR, "config.txt")
 HERE      = os.path.dirname(os.path.abspath(__file__))
 STATE     = os.path.join(HERE, "state.json")
-EXPORT    = r"E:\AI\workspace\vocal_focus"
-LOOPBACK_KEY = "Audiolab"
+ROOT      = os.path.dirname(HERE)                      # 倉庫根目錄（app 的上一層）
+EXPORT    = ROOT
+LOOPBACK_KEY = "Audiolab"   # 優先找名稱含這個字的側錄裝置；找不到就用預設喇叭
 
 # 免費 VST2（Airwindows：MIT 授權、可攜、不需安裝）
-VST_AIR  = r"E:\AI\workspace\vocal_focus\vst\airwindows\WinVST64s\Air64.dll"
+VST_AIR  = os.path.join(ROOT, "vst", "airwindows", "WinVST64s", "Air64.dll")
 # 真空管暖度：實測 516 顆裡唯一「偶次諧波為主」的（Tube/Tube2/TubeDesk 都是奇次＝硬、刺）
-VST_WARM = r"E:\AI\workspace\vocal_focus\vst\airwindows\WinVST64s\PurestWarm64.dll"
+VST_WARM = os.path.join(ROOT, "vst", "airwindows", "WinVST64s", "PurestWarm64.dll")
 
 # ---------------- 女聲控制（最上面那一顆）----------------
 # 「女聲控制」0～100% 就是「伴奏退後量」的另一種刻度，兩顆是同一個參數（拉哪一顆都同步）。
@@ -326,13 +327,17 @@ def _find_loopback(pa):
         d = pa.get_device_info_by_index(i)
         if LOOPBACK_KEY in d["name"] and "Loopback" in d["name"]:
             return i, d
-    return None, None
+    try:                  # 沒有指定的音效卡 → 用 Windows 預設喇叭的側錄
+        d = pa.get_default_wasapi_loopback()
+        return d["index"], d
+    except Exception:
+        return None, None
 
 def record(secs=3.5):
     pa = pyaudio.PyAudio()
     idx, d = _find_loopback(pa)
     if idx is None:
-        pa.terminate(); raise RuntimeError("找不到 M-DAC 的 loopback 裝置（M-DAC 沒插好？）")
+        pa.terminate(); raise RuntimeError("找不到可以側錄的輸出裝置（喇叭或音效卡沒插好？）")
     rate = int(d["defaultSampleRate"])
     st = pa.open(format=pyaudio.paInt16, channels=2, rate=rate, input=True,
                  input_device_index=idx, frames_per_buffer=1024)
