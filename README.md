@@ -1,10 +1,11 @@
 # 甜嗓 SweetVox
 
+<p align="center"><img src="docs/screenshot.png" alt="甜嗓調整台介面" width="640"></p>
+
 聽音樂時把**女聲往前推、伴奏往後退**的 Windows 桌面調音台。
 底層用 [Equalizer APO](https://sourceforge.net/projects/equalizerapo/)（系統層等化器）把左右聲道拆成
 「正中（通常是人聲）」和「兩側（通常是伴奏）」，各自調整後再無損還原。
 
-![介面](gui_sweetvox_20260926_現況.png)
 
 ## 版本
 
