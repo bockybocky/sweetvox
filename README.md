@@ -65,7 +65,23 @@
 程式預設找名稱含 `Audiolab` / `M-DAC` 的裝置（作者的音效卡）做側錄量測。
 換成你的裝置：改 `app/vocal_focus_gui.py` 的 `LOOPBACK_KEY`，以及 `tools/lb_*.py` 裡的裝置名稱。
 
-真空管／Air 兩個飽和效果用 Airwindows 的 VST2 外掛（MIT），本倉庫不附，要自己下載並改設定裡的路徑。預設是關的。
+### 真空管暖度與 Air（兩個選配外掛）
+
+調整台下半部有兩個勾選項，靠另外兩個小外掛（附加的聲音處理程式）做出來：
+
+| 勾選項 | 用哪個外掛 | 聽起來 |
+|---|---|---|
+| 真空管暖度 | Airwindows `PurestWarm64.dll` | 聲音多一點溫暖的厚度，像老式真空管音響 |
+| 通透：加 Airwindows Air | Airwindows `Air64.dll` | 高音更亮、更有空氣感 |
+
+這兩個外掛是 Airwindows 做的，免費、MIT 授權。本倉庫沒有附，要自己裝：
+
+1. 到 Airwindows 官方（[airwindows.com](https://www.airwindows.com/) 或 GitHub [airwindows/airwindows](https://github.com/airwindows/airwindows)）下載 Windows 64 位元的 VST 版本。
+2. 找到 `PurestWarm64.dll` 和 `Air64.dll`，放在你想放的資料夾。
+3. 打開 `app/vocal_focus_gui.py`，把第 55 行 `VST_AIR` 和第 57 行 `VST_WARM` 的路徑改成你放的位置。
+
+**不裝也能用。** 注意：真空管在程式預設裡是**開的**，「深夜甜嗓」模式也會打開它。沒裝外掛的話，請把「真空管暖度」的勾拿掉。
+「發燒」和「鋼琴（發燒）」兩個模式完全不用這兩個外掛，最乾淨。
 
 ## 已知限制
 
