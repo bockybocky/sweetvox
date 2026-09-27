@@ -1,0 +1,40 @@
+女聲前移 — Equalizer APO 實機驗收紀錄
+日期：2026-09-22 21:2x～21:4x
+機器：（測試機）（Windows 11，i7-13700KF）
+輸出裝置：喇叭 (Audiolab M-DAC)，端點 GUID {…}
+
+一、安裝
+- EqualizerAPO-x64-1.4.2.exe（官方 SourceForge，11,980,366 bytes）以 /S 靜默安裝
+- 裝置選擇：Device Selector 勾「喇叭 / Audiolab M-DAC」→ 按 OK
+- 證據：端點 FxProperties 出現
+    {d04e05a6-594b-4fb6-a80d-01af5eed7d1d},5 = {…}
+    {d04e05a6-594b-4fb6-a80d-01af5eed7d1d},7 = {…}
+  這兩個 CLSID 的 InprocServer32 都指向 C:\Program Files\EqualizerAPO\EqualizerAPO.dll
+- 安裝內建測試：Device Selector 的「Testing APO installation」回報
+    "Restarting audio service... / Checking APO installation... / Checks done. No problems were detected."
+
+二、設定檔載入（用 APO 內建 Benchmark.exe，命令列工具）
+- Benchmark 每次執行都印 "Loading configuration took ~1.2 ms"，全程沒有 Error / Invalid line
+  → 設定檔（含 Copy 拆中側那四行）被 APO 接受。
+
+三、量化驗收（測試訊號：3 kHz 正弦，48 kHz/16 bit，輸入 RMS -21.07 dB）
+
+| 測試 | 輸入 | 輸出 RMS | 實測增益 | 理論值 | 判定 |
+|---|---|---|---|---|---|
+| 純正中（L=R，女聲） | -21.07 dB | -22.18 dB | **-1.11 dB** | -1.10 dB（3 kHz +2.40 EQ − 3.5 preamp） | 通過 |
+| 純側面（L=−R，伴奏） | -21.07 dB | -29.60 dB | **-8.53 dB** | ≈ -8.4 dB（side −4.0 −2 kHz 凹陷 −3.5 preamp） | 通過 |
+| 預設滿刻度掃頻 | 0 dBFS | Max 0.880927 | **-1.101 dBFS** | — | 通過（門檻 ≤ -0.5 dBFS，無削波） |
+
+關鍵判別：如果 Copy 拆中側那四行被 APO 默默忽略，純側面測試只會衰減 -3.5 dB（只剩全域
+preamp）；實測 -8.53 dB → **mid/side 拆解與側面衰減真的在運作**。
+- 女聲（正中）相對伴奏（側面）的增益差：-1.11 − (−8.53) = **+7.42 dB**
+  → 超過驗收門檻 A（≥ 3 dB）。
+
+四、修正紀錄
+- 第一版全域 Preamp 只有 -2.0 dB：滿刻度掃頻輸出 +0.399 dB、175314 samples clipped
+  → 改成 -3.5 dB（light -2.5／med -3.5／strong -4.5／純 EQ 版 -3.0），重跑後 -1.101 dBFS、0 clipping。
+
+五、待驗（只有 Charles 的耳朵能判）
+- 主觀偏好率（門檻 ≥ 70%）：需要他在 YouTube Music 上實際聽並回饋
+- 他聽完可能要調的旋鈕：side Preamp（伴奏退多少）、mid 3 kHz Gain（女聲多亮）、
+  mid 350 Hz Gain（去濁多兇）、mid 7.5 kHz Gain（齒音）

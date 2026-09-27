@@ -1,0 +1,17 @@
+{
+  "side": -6.0,
+  "sweet": 1.5,
+  "mud": -2.0,
+  "sib": 0.0,
+  "warm": 1.0,
+  "air": 1.0,
+  "gain": 1.0,
+  "vst_air": false,
+  "tube": false,
+  "tube_drive": 0.0,
+  "centerbass": false,
+  "on": true,
+  "side_band": true,
+  "piano": false,
+  "subcut": 35.0
+}

@@ -1,0 +1,558 @@
+{
+  "started": "2026-09-23T16:00:21.746Z",
+  "checks": {
+    "mount": {
+      "mounts": 1,
+      "api": true
+    },
+    "style_once": {
+      "styles_after": 1,
+      "roots": 1
+    },
+    "V1": {
+      "pass": true,
+      "peak_segment_max_db": {
+        "diff": 0.007073661761845873,
+        "name": "濃",
+        "f": 339.0281901949751
+      },
+      "shelf_segment_max_db": {
+        "diff": 0.010012061506371017,
+        "name": "濃",
+        "f": 95.1365692002178
+      },
+      "overall_max_db": {
+        "diff": 0.010012061506371017,
+        "name": "濃",
+        "f": 95.1365692002178
+      },
+      "per_preset": [
+        {
+          "preset": "淡",
+          "max_diff_db": 0.005020844607908526,
+          "at_hz": 95.1365692002178
+        },
+        {
+          "preset": "中",
+          "max_diff_db": 0.007521339155697193,
+          "at_hz": 95.1365692002178
+        },
+        {
+          "preset": "濃",
+          "max_diff_db": 0.010012061506371017,
+          "at_hz": 95.1365692002178
+        },
+        {
+          "preset": "深夜甜嗓",
+          "max_diff_db": 0.0025128870404103054,
+          "at_hz": 95.1365692002178
+        }
+      ],
+      "points": 120,
+      "sample_rate": 96000
+    },
+    "V2": {
+      "pass": true,
+      "max_diff_db": 0,
+      "rows": [
+        {
+          "preset": "淡",
+          "js_safe_preamp_db": -4.655996822921822,
+          "py_safe_preamp_db": -4.655996822921822,
+          "diff_db": 0,
+          "js_config_preamp_db": -4.655996822921822,
+          "py_config_preamp_db": -4.7,
+          "config_line": "Preamp: -4.7 dB"
+        },
+        {
+          "preset": "中",
+          "js_safe_preamp_db": -5.153921906186508,
+          "py_safe_preamp_db": -5.153921906186508,
+          "diff_db": 0,
+          "js_config_preamp_db": -5.153921906186508,
+          "py_config_preamp_db": -5.2,
+          "config_line": "Preamp: -5.2 dB"
+        },
+        {
+          "preset": "濃",
+          "js_safe_preamp_db": -6.060225823498328,
+          "py_safe_preamp_db": -6.060225823498328,
+          "diff_db": 0,
+          "js_config_preamp_db": -6.060225823498328,
+          "py_config_preamp_db": -6.1,
+          "config_line": "Preamp: -6.1 dB"
+        },
+        {
+          "preset": "深夜甜嗓",
+          "js_safe_preamp_db": -6.101285176055118,
+          "py_safe_preamp_db": -6.101285176055118,
+          "diff_db": 0,
+          "js_config_preamp_db": -6.101285176055118,
+          "py_config_preamp_db": -6.1,
+          "config_line": "Preamp: -6.1 dB"
+        }
+      ]
+    },
+    "V3": {
+      "pass": true,
+      "rows": [
+        {
+          "preset": "淡",
+          "identical": true,
+          "lines": 34,
+          "first_diff": null,
+          "md5_js": "10eeff51de21d3e7c2a9eb155b715eb3",
+          "md5_py": "10eeff51de21d3e7c2a9eb155b715eb3"
+        },
+        {
+          "preset": "中",
+          "identical": true,
+          "lines": 34,
+          "first_diff": null,
+          "md5_js": "506547fbb48966574fa3472597b21317",
+          "md5_py": "506547fbb48966574fa3472597b21317"
+        },
+        {
+          "preset": "濃",
+          "identical": true,
+          "lines": 35,
+          "first_diff": null,
+          "md5_js": "4861d71fed0366498bbae17c900c2c89",
+          "md5_py": "4861d71fed0366498bbae17c900c2c89"
+        },
+        {
+          "preset": "深夜甜嗓",
+          "identical": true,
+          "lines": 35,
+          "first_diff": null,
+          "md5_js": "ba777a22f50c40a794b17b09b1a38dcd",
+          "md5_py": "ba777a22f50c40a794b17b09b1a38dcd"
+        },
+        {
+          "preset": "下載鈕(Blob)",
+          "identical": true,
+          "lines": 34
+        },
+        {
+          "preset": "UI 按「淡」",
+          "identical": true,
+          "state_matched": true,
+          "lines": 34
+        },
+        {
+          "preset": "UI 按「中」",
+          "identical": true,
+          "state_matched": true,
+          "lines": 34
+        },
+        {
+          "preset": "UI 按「濃」",
+          "identical": true,
+          "state_matched": true,
+          "lines": 35
+        },
+        {
+          "preset": "UI 按「深夜甜嗓」",
+          "identical": true,
+          "state_matched": true,
+          "lines": 35
+        }
+      ],
+      "download_blob_bytes": 1111,
+      "download_blob_type": "text/plain;charset=utf-8"
+    },
+    "V4": {
+      "pass": true,
+      "preset": "中",
+      "freq_hz": 3000,
+      "mid_fund_db": -4.2554021526551775,
+      "side_fund_db": -13.188804538544971,
+      "diff_db": 8.933402385889794,
+      "mid_rms_db": -4.253388791147394,
+      "side_rms_db": -13.188804538541213,
+      "preamp_db": -5.153922072950261
+    },
+    "V5": {
+      "pass": true,
+      "worst_peak_db": -7.117815201081942,
+      "rows": [
+        {
+          "preset": "淡",
+          "peak_left_db": -7.929872163536479,
+          "peak_right_db": -7.117815201081942,
+          "preamp_db": -4.655997166732313
+        },
+        {
+          "preset": "中",
+          "peak_left_db": -9.046424082691662,
+          "peak_right_db": -8.55089460858803,
+          "preamp_db": -5.153922072950261
+        },
+        {
+          "preset": "濃",
+          "peak_left_db": -10.333350750720637,
+          "peak_right_db": -10.297267949775266,
+          "preamp_db": -6.060225804023654
+        },
+        {
+          "preset": "深夜甜嗓",
+          "peak_left_db": -10.856643538146088,
+          "peak_right_db": -10.932125461334458,
+          "preamp_db": -6.101285242786983
+        }
+      ],
+      "noise": "滿刻度粉紅雜訊 10 秒、fs=96 kHz"
+    },
+    "V6": {
+      "pass": true,
+      "max_err_left": 5.960464477539063e-8,
+      "at_left": 4069,
+      "max_err_right": 5.960464477539063e-8,
+      "at_right": 4122,
+      "preamp_db": 0
+    },
+    "V7": {
+      "pass": true,
+      "shots": [
+        {
+          "scheme": "light",
+          "width": 360,
+          "file": "demo_light_360.png",
+          "bytes": 62934,
+          "has_h_scroll": false,
+          "doc_scroll_width": 360,
+          "root_scroll_width": 326,
+          "root_client_width": 326,
+          "overflowing": []
+        },
+        {
+          "scheme": "light",
+          "width": 1200,
+          "file": "demo_light_1200.png",
+          "bytes": 68053,
+          "has_h_scroll": false,
+          "doc_scroll_width": 1200,
+          "root_scroll_width": 758,
+          "root_client_width": 758,
+          "overflowing": []
+        },
+        {
+          "scheme": "dark",
+          "width": 360,
+          "file": "demo_dark_360.png",
+          "bytes": 62505,
+          "has_h_scroll": false,
+          "doc_scroll_width": 360,
+          "root_scroll_width": 326,
+          "root_client_width": 326,
+          "overflowing": []
+        },
+        {
+          "scheme": "dark",
+          "width": 1200,
+          "file": "demo_dark_1200.png",
+          "bytes": 67146,
+          "has_h_scroll": false,
+          "doc_scroll_width": 1200,
+          "root_scroll_width": 758,
+          "root_client_width": 758,
+          "overflowing": []
+        }
+      ],
+      "console_errors": [],
+      "ui": {
+        "file_inputs": 1,
+        "play": 1,
+        "ab": 1,
+        "sliders": 8,
+        "slider_labels": 8,
+        "values_shown": 8,
+        "checks": 2,
+        "presets": 4,
+        "reset": 8,
+        "dl": 1,
+        "aria_pressed": null,
+        "note_text": "這個頁面只碰得到你自己選的那個檔案，聽不到 YouTube Music（或其他播放器）的聲音。全程在你的瀏覽器裡處理，不會上傳。",
+        "lang": "zh-TW",
+        "styles": 1
+      }
+    },
+    "THD": {
+      "tube_on_drive6_thd_pct": 1.7005425852743568,
+      "tube_on_fund": 0.24434947268102145,
+      "tube_off_thd_pct": 0.004269477803862533,
+      "tube_off_fund": 0.24957878389766142,
+      "peak_tube_on_db": -11.666633225554987,
+      "spec": "1 kHz 正弦、-12 dBFS 入力、推力 6 dB；規格要求 1%～3%",
+      "pass": true,
+      "sweep": [
+        {
+          "drive_db": 0,
+          "thd_pct": 0.8171822039281779,
+          "fund": 0.2482370037232332,
+          "even_minus_odd_db": 13.064726750750346,
+          "peak_db": -11.590221850542243
+        },
+        {
+          "drive_db": 3,
+          "thd_pct": 1.1713608718004795,
+          "fund": 0.24692151570739426,
+          "even_minus_odd_db": 9.976470478883098,
+          "peak_db": -11.605128822245543
+        },
+        {
+          "drive_db": 6,
+          "thd_pct": 1.7005425852743568,
+          "fund": 0.24434947268102145,
+          "even_minus_odd_db": 6.883294068280064,
+          "peak_db": -11.666633225554987
+        },
+        {
+          "drive_db": 9,
+          "thd_pct": 2.5207394738703033,
+          "fund": 0.23942072853951316,
+          "even_minus_odd_db": 3.740954807285635,
+          "peak_db": -11.829770981172306
+        },
+        {
+          "drive_db": 12,
+          "thd_pct": 3.8449684368802957,
+          "fund": 0.23032453483020135,
+          "even_minus_odd_db": 0.4960678168521682,
+          "peak_db": -12.196152127013526
+        },
+        {
+          "drive_db": 18,
+          "thd_pct": 9.529104302212168,
+          "fund": 0.19038061155397146,
+          "even_minus_odd_db": -6.525637548745289,
+          "peak_db": -14.225858516285246
+        }
+      ]
+    },
+    "AB": {
+      "pass": true,
+      "undecidable": false,
+      "detail": {
+        "filename_shown": "swx-test-tone.wav",
+        "played": true,
+        "ct1": 1.090667,
+        "paused2": false,
+        "ct2": 1.701333,
+        "pressed2": "false",
+        "paused3": false,
+        "ct3": 2.301333,
+        "pressed3": "true",
+        "advanced": true,
+        "never_paused": true,
+        "ab_text_after": "甜嗓"
+      }
+    },
+    "RATE": {
+      "rows": {
+        "淡": {
+          "max_diff_db": 0.09306489661462092,
+          "at_hz": 13668.760106701211
+        },
+        "中": {
+          "max_diff_db": 0.13624116533416641,
+          "at_hz": 13668.760106701211
+        },
+        "濃": {
+          "max_diff_db": 0.20389077331615146,
+          "at_hz": 13668.760106701211
+        },
+        "深夜甜嗓": {
+          "max_diff_db": 0.14974379981357488,
+          "at_hz": 14481.546878700556
+        },
+        "DEFAULTS": {
+          "max_diff_db": 0.17377793835875277,
+          "at_hz": 13668.760106701211
+        }
+      }
+    }
+  },
+  "desktop_md5": "c70aba72f54344a0c6bdf7092f18ee6a",
+  "artifacts": {
+    "sweetvox.js": "27ebc38521fbc04e8d2196efc1beeb1f",
+    "demo.html": "ba018f6b5ad4e33cb2175f4d71103161",
+    "test_sweetvox.mjs": "2cc89d4e1eaa212ef47d72b881343c0c",
+    "desktop app/vocal_focus_gui.py": "c70aba72f54344a0c6bdf7092f18ee6a"
+  },
+  "page": {
+    "version": "1.0.0"
+  },
+  "download": {
+    "type": "text/plain;charset=utf-8",
+    "size": 1111
+  },
+  "ui": {
+    "file_inputs": 1,
+    "play": 1,
+    "ab": 1,
+    "sliders": 8,
+    "slider_labels": 8,
+    "values_shown": 8,
+    "checks": 2,
+    "presets": 4,
+    "reset": 8,
+    "dl": 1,
+    "aria_pressed": null,
+    "note_text": "這個頁面只碰得到你自己選的那個檔案，聽不到 YouTube Music（或其他播放器）的聲音。全程在你的瀏覽器裡處理，不會上傳。",
+    "lang": "zh-TW",
+    "styles": 1
+  },
+  "shots": [
+    {
+      "scheme": "light",
+      "width": 360,
+      "file": "E:\\AI\\workspace\\vocal_focus\\web\\shots\\demo_light_360.png",
+      "bytes": 62934,
+      "inner_width": 360,
+      "doc_scroll_width": 360,
+      "body_scroll_width": 360,
+      "root_scroll_width": 326,
+      "root_client_width": 326,
+      "overflowing": [],
+      "has_h_scroll": false
+    },
+    {
+      "scheme": "light",
+      "width": 1200,
+      "file": "E:\\AI\\workspace\\vocal_focus\\web\\shots\\demo_light_1200.png",
+      "bytes": 68053,
+      "inner_width": 1200,
+      "doc_scroll_width": 1200,
+      "body_scroll_width": 1200,
+      "root_scroll_width": 758,
+      "root_client_width": 758,
+      "overflowing": [],
+      "has_h_scroll": false
+    },
+    {
+      "scheme": "dark",
+      "width": 360,
+      "file": "E:\\AI\\workspace\\vocal_focus\\web\\shots\\demo_dark_360.png",
+      "bytes": 62505,
+      "inner_width": 360,
+      "doc_scroll_width": 360,
+      "body_scroll_width": 360,
+      "root_scroll_width": 326,
+      "root_client_width": 326,
+      "overflowing": [],
+      "has_h_scroll": false
+    },
+    {
+      "scheme": "dark",
+      "width": 1200,
+      "file": "E:\\AI\\workspace\\vocal_focus\\web\\shots\\demo_dark_1200.png",
+      "bytes": 67146,
+      "inner_width": 1200,
+      "doc_scroll_width": 1200,
+      "body_scroll_width": 1200,
+      "root_scroll_width": 758,
+      "root_client_width": 758,
+      "overflowing": [],
+      "has_h_scroll": false
+    }
+  ],
+  "ab": {
+    "filename_shown": "swx-test-tone.wav",
+    "played": true,
+    "ct1": 1.090667,
+    "paused2": false,
+    "ct2": 1.701333,
+    "pressed2": "false",
+    "paused3": false,
+    "ct3": 2.301333,
+    "pressed3": "true",
+    "advanced": true,
+    "never_paused": true,
+    "ab_text_after": "甜嗓"
+  },
+  "preset_click": [
+    {
+      "id": "淡",
+      "found": true,
+      "matched": true,
+      "diff_keys": [],
+      "on": true,
+      "aria": "true",
+      "text": "# 甜嗓 SweetVox ─ 女聲前移／通透化（調整台寫入 2026-09-24 00:00:32）\n# 自動餘裕 Preamp -4.7 dB：確保（甜度/溫暖/空氣感）推上去後不削波\nPreamp: -4.7 dB\n\n# 拆成 MID（正中＝女聲）／SIDE（兩側＝伴奏）\nChannel: all\nCopy: R=0.5*L+-0.5*R\nCopy: L=L+-1.0*R\n\n# MID：女聲\nChannel: L\nFilter 1: ON HPQ Fc 35 Hz Q 0.7\nFilter 2: ON LS Fc 150 Hz Gain 1.0 dB Q 0.7\nFilter 3: ON PK Fc 350 Hz Gain -2.0 dB Q 1.4\nFilter 4: ON PK Fc 3000 Hz Gain 1.0 dB Q 0.9\nFilter 5: ON PK Fc 7500 Hz Gain -0.8 dB Q 2.0\nFilter 6: ON HS Fc 10000 Hz Gain 1.0 dB\n\n# 真空管暖度：Airwindows PurestWarm（MIT、VST2、零延遲）\n# 只掛在正中（女聲）這條鏈；推力→飽和→等量衰減，音量不變\n# 實測：推力 0 dB→THD 0.32%／推力 12 dB→THD 5.17%，兩者都是偶次諧波為主\nPreamp: +6.0 dB\nVSTPlugin: Library \"E:\\AI\\workspace\\vocal_focus\\vst\\airwindows\\WinVST64s\\PurestWarm64.dll\"\nPreamp: -6.0 dB\n\n# SIDE：伴奏\nChannel: R\nPreamp: -4.0 dB\nFilter 1: ON PK Fc 2000 Hz Gain -1.5 dB Q 0.8\n\n# 還原回 L/R\nChannel: all\nCopy: L=L+R\nCopy: R=L+-2.0*R\n",
+      "slider_sweet": "1",
+      "shown_values": [
+        "+1.0 dB",
+        "-2.0 dB",
+        "-0.8 dB",
+        "+1.0 dB",
+        "-4.0 dB",
+        "0.0 dB",
+        "+1.0 dB",
+        "+6 dB"
+      ]
+    },
+    {
+      "id": "中",
+      "found": true,
+      "matched": true,
+      "diff_keys": [],
+      "on": true,
+      "aria": "true",
+      "text": "# 甜嗓 SweetVox ─ 女聲前移／通透化（調整台寫入 2026-09-24 00:00:32）\n# 自動餘裕 Preamp -5.2 dB：確保（甜度/溫暖/空氣感）推上去後不削波\nPreamp: -5.2 dB\n\n# 拆成 MID（正中＝女聲）／SIDE（兩側＝伴奏）\nChannel: all\nCopy: R=0.5*L+-0.5*R\nCopy: L=L+-1.0*R\n\n# MID：女聲\nChannel: L\nFilter 1: ON HPQ Fc 35 Hz Q 0.7\nFilter 2: ON LS Fc 150 Hz Gain 1.5 dB Q 0.7\nFilter 3: ON PK Fc 350 Hz Gain -3.0 dB Q 1.4\nFilter 4: ON PK Fc 3000 Hz Gain 1.2 dB Q 0.9\nFilter 5: ON PK Fc 7500 Hz Gain -1.0 dB Q 2.0\nFilter 6: ON HS Fc 10000 Hz Gain 1.5 dB\n\n# 真空管暖度：Airwindows PurestWarm（MIT、VST2、零延遲）\n# 只掛在正中（女聲）這條鏈；推力→飽和→等量衰減，音量不變\n# 實測：推力 0 dB→THD 0.32%／推力 12 dB→THD 5.17%，兩者都是偶次諧波為主\nPreamp: +6.0 dB\nVSTPlugin: Library \"E:\\AI\\workspace\\vocal_focus\\vst\\airwindows\\WinVST64s\\PurestWarm64.dll\"\nPreamp: -6.0 dB\n\n# SIDE：伴奏\nChannel: R\nPreamp: -7.0 dB\nFilter 1: ON PK Fc 2000 Hz Gain -1.5 dB Q 0.8\n\n# 還原回 L/R\nChannel: all\nCopy: L=L+R\nCopy: R=L+-2.0*R\n",
+      "slider_sweet": "1",
+      "shown_values": [
+        "+1.2 dB",
+        "-3.0 dB",
+        "-1.0 dB",
+        "+1.5 dB",
+        "-7.0 dB",
+        "0.0 dB",
+        "+1.5 dB",
+        "+6 dB"
+      ]
+    },
+    {
+      "id": "濃",
+      "found": true,
+      "matched": true,
+      "diff_keys": [],
+      "on": true,
+      "aria": "true",
+      "text": "# 甜嗓 SweetVox ─ 女聲前移／通透化（調整台寫入 2026-09-24 00:00:32）\n# 自動餘裕 Preamp -6.1 dB：確保（甜度/溫暖/空氣感）推上去後不削波\nPreamp: -6.1 dB\n\n# 拆成 MID（正中＝女聲）／SIDE（兩側＝伴奏）\nChannel: all\nCopy: R=0.5*L+-0.5*R\nCopy: L=L+-1.0*R\n\n# MID：女聲\nChannel: L\nFilter 1: ON HPQ Fc 35 Hz Q 0.7\nFilter 2: ON LS Fc 150 Hz Gain 2.0 dB Q 0.7\nFilter 3: ON PK Fc 350 Hz Gain -3.5 dB Q 1.4\nFilter 4: ON PK Fc 3000 Hz Gain 2.0 dB Q 0.9\nFilter 5: ON PK Fc 7500 Hz Gain -1.2 dB Q 2.0\nFilter 6: ON HS Fc 10000 Hz Gain 2.5 dB\n\n# 真空管暖度：Airwindows PurestWarm（MIT、VST2、零延遲）\n# 只掛在正中（女聲）這條鏈；推力→飽和→等量衰減，音量不變\n# 實測：推力 0 dB→THD 0.32%／推力 12 dB→THD 5.17%，兩者都是偶次諧波為主\nPreamp: +6.0 dB\nVSTPlugin: Library \"E:\\AI\\workspace\\vocal_focus\\vst\\airwindows\\WinVST64s\\PurestWarm64.dll\"\nPreamp: -6.0 dB\n\n# SIDE：伴奏\nChannel: R\nPreamp: -11.0 dB\nFilter 1: ON PK Fc 2000 Hz Gain -1.5 dB Q 0.8\nFilter 2: ON HPQ Fc 100 Hz Q 0.7\n\n# 還原回 L/R\nChannel: all\nCopy: L=L+R\nCopy: R=L+-2.0*R\n",
+      "slider_sweet": "2",
+      "shown_values": [
+        "+2.0 dB",
+        "-3.5 dB",
+        "-1.2 dB",
+        "+2.5 dB",
+        "-11.0 dB",
+        "0.0 dB",
+        "+2.0 dB",
+        "+6 dB"
+      ]
+    },
+    {
+      "id": "深夜甜嗓",
+      "found": true,
+      "matched": true,
+      "diff_keys": [],
+      "on": true,
+      "aria": "true",
+      "text": "# 甜嗓 SweetVox ─ 女聲前移／通透化（調整台寫入 2026-09-24 00:00:32）\n# 自動餘裕 Preamp -6.1 dB：確保（甜度/溫暖/空氣感）推上去後不削波\nPreamp: -6.1 dB\n\n# 拆成 MID（正中＝女聲）／SIDE（兩側＝伴奏）\nChannel: all\nCopy: R=0.5*L+-0.5*R\nCopy: L=L+-1.0*R\n\n# MID：女聲\nChannel: L\nFilter 1: ON HPQ Fc 85 Hz Q 0.7\nFilter 2: ON LS Fc 150 Hz Gain 0.5 dB Q 0.7\nFilter 3: ON PK Fc 350 Hz Gain -3.0 dB Q 1.4\nFilter 4: ON PK Fc 3000 Hz Gain 2.0 dB Q 0.9\nFilter 5: ON PK Fc 7500 Hz Gain 0.0 dB Q 2.0\nFilter 6: ON HS Fc 10000 Hz Gain 2.5 dB\n\n# 真空管暖度：Airwindows PurestWarm（MIT、VST2、零延遲）\n# 只掛在正中（女聲）這條鏈；推力→飽和→等量衰減，音量不變\n# 實測：推力 0 dB→THD 0.32%／推力 12 dB→THD 5.17%，兩者都是偶次諧波為主\nPreamp: +6.0 dB\nVSTPlugin: Library \"E:\\AI\\workspace\\vocal_focus\\vst\\airwindows\\WinVST64s\\PurestWarm64.dll\"\nPreamp: -6.0 dB\n\n# SIDE：伴奏\nChannel: R\nPreamp: -9.0 dB\nFilter 1: ON PK Fc 2000 Hz Gain -1.5 dB Q 0.8\nFilter 2: ON HPQ Fc 100 Hz Q 0.7\n\n# 還原回 L/R\nChannel: all\nCopy: L=L+R\nCopy: R=L+-2.0*R\n",
+      "slider_sweet": "2",
+      "shown_values": [
+        "+2.0 dB",
+        "-3.0 dB",
+        "0.0 dB",
+        "+2.5 dB",
+        "-9.0 dB",
+        "0.0 dB",
+        "+0.5 dB",
+        "+6 dB"
+      ]
+    }
+  ],
+  "console_errors": [],
+  "finished": "2026-09-23T16:00:33.019Z"
+}

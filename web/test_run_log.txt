@@ -1,0 +1,64 @@
+wrote E:\AI\workspace\vocal_focus\web\python_reference.json
+desktop vocal_focus_gui.py md5 = c70aba72f54344a0c6bdf7092f18ee6a
+  淡      safe_preamp= -4.656 dB  config_preamp= -4.700 dB  mid(3k)=+0.95 dB
+  中      safe_preamp= -5.154 dB  config_preamp= -5.200 dB  mid(3k)=+1.14 dB
+  濃      safe_preamp= -6.060 dB  config_preamp= -6.100 dB  mid(3k)=+1.93 dB
+  深夜甜嗓   safe_preamp= -6.101 dB  config_preamp= -6.100 dB  mid(3k)=+2.00 dB
+這輪驗的檔案 md5：{"sweetvox.js":"27ebc38521fbc04e8d2196efc1beeb1f","demo.html":"ba018f6b5ad4e33cb2175f4d71103161","test_sweetvox.mjs":"2cc89d4e1eaa212ef47d72b881343c0c","desktop app/vocal_focus_gui.py":"c70aba72f54344a0c6bdf7092f18ee6a"}
+Chrome Chrome/153.0.8010.53  headless，遠端除錯埠 49823
+開檔：file:///E:/AI/workspace/vocal_focus/web/demo.html
+頁面上掛了 1 個，SweetVox API：true
+介面：滑桿 8、預設 4、勾選 2、樣式表 1 份
+  截圖 light 360px → demo_light_360.png（62934 bytes，橫向捲軸：false）
+  截圖 light 1200px → demo_light_1200.png（68053 bytes，橫向捲軸：false）
+  截圖 dark 360px → demo_dark_360.png（62505 bytes，橫向捲軸：false）
+  截圖 dark 1200px → demo_dark_1200.png（67146 bytes，橫向捲軸：false）
+A/B：載入測試音後播放中=true、切換前後播放位置 1.163 → 1.765 → 2.373，中途沒暫停=true
+
+================ 驗收結果 ================
+V1 MID 鏈頻率響應      通過  峰值段最大差 0.007 dB（濃 @ 339.0 Hz） / 架式段最大差 0.010 dB（濃 @ 95.1 Hz）
+   全部點最大差 0.010 dB（濃 @ 95.1 Hz），共 120 點 × 4 預設
+V2 Preamp              通過  最大差 0.0000 dB
+   淡: JS -4.656 / Python -4.656 dB｜設定檔那行「Preamp: -4.7 dB」
+   中: JS -5.154 / Python -5.154 dB｜設定檔那行「Preamp: -5.2 dB」
+   濃: JS -6.060 / Python -6.060 dB｜設定檔那行「Preamp: -6.1 dB」
+   深夜甜嗓: JS -6.101 / Python -6.101 dB｜設定檔那行「Preamp: -6.1 dB」
+V3 設定檔逐行比對      通過
+   淡: 完全相同（34 行）
+   中: 完全相同（34 行）
+   濃: 完全相同（35 行）
+   深夜甜嗓: 完全相同（35 行）
+   下載鈕(Blob): 完全相同（34 行）
+   UI 按「淡」: 完全相同（34 行）
+   UI 按「中」: 完全相同（34 行）
+   UI 按「濃」: 完全相同（35 行）
+   UI 按「深夜甜嗓」: 完全相同（35 行）
+V4 正中 vs 兩側 3 kHz  通過  正中 -4.26 dB、兩側 -13.19 dB，差 8.93 dB
+V5 粉紅雜訊峰值        通過  最差 -7.12 dBFS
+   淡: L -7.93 / R -7.12 dBFS（Preamp -4.66 dB）
+   中: L -9.05 / R -8.55 dBFS（Preamp -5.15 dB）
+   濃: L -10.33 / R -10.30 dBFS（Preamp -6.06 dB）
+   深夜甜嗓: L -10.86 / R -10.93 dBFS（Preamp -6.10 dB）
+V6 全 0 時輸出＝輸入   通過  最大誤差 L 5.960e-8 / R 5.960e-8
+V7 無頭 Chrome 介面    通過  截圖 4 張、主控台錯誤 0 筆
+   light 360px: demo_light_360.png（62934 bytes）捲軸寬 360 / 視窗 360 橫向捲軸=false
+   light 1200px: demo_light_1200.png（68053 bytes）捲軸寬 1200 / 視窗 1200 橫向捲軸=false
+   dark 360px: demo_dark_360.png（62505 bytes）捲軸寬 360 / 視窗 360 橫向捲軸=false
+   dark 1200px: demo_dark_1200.png（67146 bytes）捲軸寬 1200 / 視窗 1200 橫向捲軸=false
+THD（附加）            通過  推力 6 dB、-12 dBFS：1.70%（推力關掉時 0.0043%）
+   推力掃描（網頁 WaveShaper vs 桌面版 PurestWarm 實測表）
+     推力  0 dB: THD 0.82%  偶-奇 13.1 dB
+     推力  3 dB: THD 1.17%  偶-奇 10.0 dB
+     推力  6 dB: THD 1.70%  偶-奇 6.9 dB
+     推力  9 dB: THD 2.52%  偶-奇 3.7 dB
+     推力 12 dB: THD 3.84%  偶-奇 0.5 dB
+     推力 18 dB: THD 9.53%  偶-奇 -6.5 dB
+A/B 切換（附加）       通過  播放中 true、位置 1.163 → 1.765 → 2.373、中途沒暫停 true
+取樣率差（附加）：48 kHz 播放 vs 96 kHz 驗算基準（MID 鏈，最大差）
+   淡: 0.093 dB @ 13669 Hz
+   中: 0.136 dB @ 13669 Hz
+   濃: 0.204 dB @ 13669 Hz
+   深夜甜嗓: 0.150 dB @ 14482 Hz
+   DEFAULTS: 0.174 dB @ 13669 Hz
+==========================================
+全部：通過　結果檔：E:\AI\workspace\vocal_focus\web\test_results.json

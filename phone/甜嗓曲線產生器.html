@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>甜嗓 SweetVox — 手機版曲線產生器</title>
+<style>
+  :root{
+    --bg:#15161a; --card:#1e2027; --card2:#272a33; --txt:#e9eaee; --dim:#98a0ad;
+    --pink:#ff8fb1; --amber:#ffc46b; --ok:#63d38f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:16px/1.6 "Microsoft JhengHei UI","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+       -webkit-text-size-adjust:100%}
+  .wrap{max-width:720px;margin:0 auto;padding:18px 16px 56px}
+  header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  h1{margin:0;font-size:26px;color:var(--pink)}
+  h1 span{color:var(--txt);font-size:16px;font-weight:400}
+  .sub{color:var(--dim);font-size:13px;margin:0 0 16px}
+  .card{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+  .card h2{margin:0 0 12px;font-size:14px;color:#b9c0cc;font-weight:600;letter-spacing:.02em}
+  .knob{margin:0 0 14px}
+  .knob .row{display:flex;justify-content:space-between;align-items:baseline}
+  .knob label{font-size:17px}
+  .knob .val{font-variant-numeric:tabular-nums;color:var(--amber);font-weight:700;font-size:19px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:38px;background:transparent;margin:0}
+  input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:6px;background:#0b0c10}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:34px;height:34px;margin-top:-12px;
+      border-radius:50%;background:var(--pink);border:none;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+  input[type=range]::-moz-range-track{height:10px;border-radius:6px;background:#0b0c10}
+  input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;background:var(--pink);border:none}
+  .tip{color:var(--dim);font-size:12px;margin-top:-6px}
+  .row-btns{display:flex;gap:8px;flex-wrap:wrap}
+  button{font:inherit;color:var(--txt);background:var(--card2);border:0;border-radius:10px;
+         padding:11px 14px;min-height:44px;cursor:pointer}
+  button:active{background:var(--pink);color:#20131a}
+  button.on{background:var(--pink);color:#20131a;font-weight:700}
+  .chk{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:15px}
+  input[type=checkbox]{width:22px;height:22px;accent-color:var(--pink)}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:15px}
+  th,td{text-align:right;padding:6px 8px;border-bottom:1px solid #2b2e37}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--dim);font-weight:500;font-size:13px}
+  canvas{width:100%;height:190px;background:#0f1014;border-radius:10px}
+  pre{background:#0f1014;border-radius:10px;padding:12px;overflow-x:auto;font-size:13px;line-height:1.5;
+      font-family:Consolas,Menlo,monospace;white-space:pre}
+  .ad{border:1px dashed #3a3d47;border-radius:12px;padding:18px;text-align:center;color:var(--dim);font-size:13px}
+  .aff{background:linear-gradient(135deg,#2a2030,#1e2027);border-radius:12px;padding:14px 16px;font-size:14px}
+  .aff b{color:var(--amber)}
+  details{margin-top:10px}summary{cursor:pointer;color:#b9c0cc}
+  .q{color:var(--pink);font-weight:600}
+  footer{color:var(--dim);font-size:12px;margin-top:22px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>甜嗓 <span>SweetVox</span></h1>
+  </header>
+  <p class="sub">手機版曲線產生器 — 拉三顆旋鈕，下面直接給你「10 段 EQ／參數式 EQ／Qudelix PEQ」數字。</p>
+
+  <div class="card">
+    <h2>三顆旋鈕</h2>
+
+    <div class="knob">
+      <div class="row"><label>低音（110 Hz 以下）</label><span class="val" id="vBass">+7.0</span></div>
+      <input type="range" id="bass" min="0" max="12" step="0.5" value="7">
+    </div>
+    <div class="knob">
+      <div class="row"><label>中音（人聲清晰度）</label><span class="val" id="vMid">+3.0</span></div>
+      <input type="range" id="mid" min="-4" max="8" step="0.5" value="3">
+      <div class="tip">這一格同時抬 1 kHz 與 3 kHz；3 kHz 是「甜嗓」的招牌，女聲會往前站。</div>
+    </div>
+    <div class="knob">
+      <div class="row"><label>高音（9 kHz 以上）</label><span class="val" id="vTre">-4.0</span></div>
+      <input type="range" id="tre" min="-10" max="2" step="0.5" value="-4">
+    </div>
+
+    <div class="chk"><input type="checkbox" id="demud" checked><label for="demud">去濁（350 Hz −2.5 dB，人聲才乾淨）</label></div>
+    <div class="chk"><input type="checkbox" id="desib" checked><label for="desib">收齒音（7.5 kHz −2 dB，ㄕㄘ 不刺）</label></div>
+  </div>
+
+  <div class="card">
+    <h2>情境</h2>
+    <div class="row-btns">
+      <button class="on" data-p="daily">日常</button>
+      <button data-p="night">深夜小聲</button>
+      <button data-p="commute">通勤吵</button>
+      <button data-p="earbud">耳機偏亮</button>
+      <button data-p="flat">全部歸零</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>這條曲線長什麼樣</h2>
+    <canvas id="plot" width="680" height="190"></canvas>
+    <p class="tip" id="pk"></p>
+  </div>
+
+  <div class="card">
+    <h2>① 10 段圖形 EQ（Wavelet、內建音效、多數 App 照著拉）</h2>
+    <table id="tbl10"></table>
+    <p class="tip">前級／Preamp 填 <b id="pre10">-7.0</b> dB，避免爆音。</p>
+    <button onclick="copyIt('out10')">複製 10 段數值</button>
+    <pre id="out10"></pre>
+  </div>
+
+  <div class="card">
+    <h2>② 參數式 EQ（Wavelet 自訂、RootlessJamesDSP、Poweramp）</h2>
+    <pre id="outParam"></pre>
+    <button onclick="copyIt('outParam')">複製參數式</button>
+  </div>
+
+  <div class="card">
+    <h2>③ Qudelix 5K PEQ（iPhone 唯一能動 YouTube Music 的走法）</h2>
+    <p class="tip">Qudelix App → 5K DAC AMP → Equalizer → PEQ，機器內建 20 段，填這幾段就夠。</p>
+    <pre id="outQ"></pre>
+    <button onclick="copyIt('outQ')">複製 Qudelix 參數</button>
+  </div>
+
+  <div class="card">
+    <h2>為什麼手機要這樣繞一圈？</h2>
+    <p><span class="q">Android：</span>系統級 EQ App（Wavelet 500 萬下載、RootlessJamesDSP）可以把上面的數字吃進去，YouTube Music 也有效。</p>
+    <p><span class="q">iPhone：</span>Apple 不允許第三方 App 動別人的聲音，YouTube Music 在 iPhone 上連自己的 EQ 都沒有；Apple 內建 EQ 只在 Apple Music 裡生效。所以 iPhone 只有一條路——<b>把 EQ 放在硬體</b>：帶 PEQ 的藍牙 DAC（例如 Qudelix 5K，20 段 PEQ 做在機器裡，播什麼都吃得到），用上面的 ③ 參數輸入。</p>
+    <p><span class="q">為什麼是這幾段？</span>350 Hz 去掉悶濁、3 kHz 讓女聲往前站、7.5 kHz 收齒音、9 kHz 以上退一步——這是「甜嗓」在電腦版上量出來的取向，搬到手機同樣成立。</p>
+  </div>
+
+  <div class="card aff">
+    <b>推薦器材（聯盟連結版位）</b><br>
+    Qudelix-5K（US$109）：iPhone 要讓 YouTube Music 吃到 EQ 的最省事解。<br>
+    <span class="tip">← 這個區塊是之後放聯盟連結的位置，先在這裡預留。</span>
+  </div>
+
+  <div class="card"><div class="ad">廣告版位（Google AdSense）<br><span class="tip">正式上線時把這裡換成 AdSense 代碼；依政策，廣告只能放在網頁上、不能放進桌面程式。</span></div></div>
+
+  <footer>甜嗓 SweetVox · 曲線以 RBJ biquad 公式即時計算（與電腦版同一套公式）</footer>
+</div>
+
+<script>
+/* ---- RBJ biquad（與電腦版 Python 同一套公式）---- */
+var FS = 48000;
+function biquad(kind, f0, g, q){
+  var A = Math.pow(10, g/40), w = 2*Math.PI*f0/FS, cw = Math.cos(w), sw = Math.sin(w);
+  var al = sw/(2*q), b, a;
+  if(kind==='LS'){
+    b=[A*((A+1)-(A-1)*cw+2*Math.sqrt(A)*al), 2*A*((A-1)-(A+1)*cw), A*((A+1)-(A-1)*cw-2*Math.sqrt(A)*al)];
+    a=[(A+1)+(A-1)*cw+2*Math.sqrt(A)*al, -2*((A-1)+(A+1)*cw), (A+1)+(A-1)*cw-2*Math.sqrt(A)*al];
+  } else if(kind==='HS'){
+    b=[A*((A+1)+(A-1)*cw+2*Math.sqrt(A)*al), -2*A*((A-1)+(A+1)*cw), A*((A+1)+(A-1)*cw-2*Math.sqrt(A)*al)];
+    a=[(A+1)-(A-1)*cw+2*Math.sqrt(A)*al, 2*((A-1)-(A+1)*cw), (A+1)-(A-1)*cw-2*Math.sqrt(A)*al];
+  } else {
+    b=[1+al*A, -2*cw, 1-al*A];
+    a=[1+al/A, -2*cw, 1-al/A];
+  }
+  var a0=a[0];
+  return {b:[b[0]/a0,b[1]/a0,b[2]/a0], a:[1,a[1]/a0,a[2]/a0]};
+}
+function resp(f, chain){
+  var re=1, im=0;
+  for(var i=0;i<chain.length;i++){
+    var c=chain[i], b=c.b, a=c.a;
+    var zr=Math.cos(-2*Math.PI*f/FS), zi=Math.sin(-2*Math.PI*f/FS);
+    var z2r=Math.cos(-4*Math.PI*f/FS), z2i=Math.sin(-4*Math.PI*f/FS);
+    var nr=b[0]+b[1]*zr+b[2]*z2r, ni=b[1]*zi+b[2]*z2i;
+    var dr=1+a[1]*zr+a[2]*z2r, di=a[1]*zi+a[2]*z2i;
+    var den=dr*dr+di*di;
+    var hr=(nr*dr+ni*di)/den, hi=(ni*dr-nr*di)/den;
+    var tr=re*hr-im*hi, ti=re*hi+im*hr; re=tr; im=ti;
+  }
+  return 20*Math.log10(Math.max(Math.sqrt(re*re+im*im), 1e-9));
+}
+var BANDS=[31,62,125,250,500,1000,2000,4000,8000,16000];
+function fmt(d){ return (d>=0?'+':'')+d.toFixed(1); }
+
+function current(){
+  var bass=parseFloat(document.getElementById('bass').value);
+  var mid =parseFloat(document.getElementById('mid').value);
+  var tre =parseFloat(document.getElementById('tre').value);
+  var ch=[];
+  ch.push({name:'低音',   en:'Low Shelf',  f:110,  g:bass,      q:0.70, type:'LS'});
+  if(document.getElementById('demud').checked)
+    ch.push({name:'去濁',  en:'Peaking',    f:350,  g:-2.5,      q:1.40, type:'PK'});
+  if(mid!==0){
+    ch.push({name:'人聲',  en:'Peaking',    f:1000, g:mid*0.85,  q:0.90, type:'PK'});
+    ch.push({name:'甜度',  en:'Peaking',    f:3000, g:mid,       q:0.90, type:'PK'});
+  }
+  if(document.getElementById('desib').checked)
+    ch.push({name:'收齒音', en:'Peaking',   f:7500, g:-2.0,      q:1.60, type:'PK'});
+  ch.push({name:'高音',   en:'High Shelf', f:9000, g:tre,       q:0.70, type:'HS'});
+  return ch;
+}
+function render(){
+  document.getElementById('vBass').textContent=fmt(parseFloat(document.getElementById('bass').value));
+  document.getElementById('vMid').textContent =fmt(parseFloat(document.getElementById('mid').value));
+  document.getElementById('vTre').textContent =fmt(parseFloat(document.getElementById('tre').value));
+
+  var ch=current().map(function(c){ return biquad(c.type,c.f,c.g,c.q); });
+  var chain=current();
+
+  // 10 段
+  var vals=BANDS.map(function(f){ return resp(f,ch); });
+  var rows='<tr><th>頻率 (Hz)</th><th>增益 (dB)</th></tr>';
+  for(var i=0;i<BANDS.length;i++) rows+='<tr><td>'+BANDS[i]+'</td><td>'+fmt(vals[i])+'</td></tr>';
+  document.getElementById('tbl10').innerHTML=rows;
+
+  // 峰值與前級
+  var peak=-99, fpk=0;
+  for(var f=20; f<=20000; f*=1.02){ var v=resp(f,ch); if(v>peak){peak=v; fpk=f;} }
+  var pre=-Math.max(peak,0);
+  document.getElementById('pre10').textContent=pre.toFixed(1);
+  document.getElementById('pk').textContent='整條曲線最大增益 '+fmt(peak)+' dB（在 '+Math.round(fpk)+' Hz）→ 前級建議 '+pre.toFixed(1)+' dB';
+
+  // 文字輸出
+  var t10='';
+  for(var i=0;i<BANDS.length;i++) t10+=String(BANDS[i]).padStart(6,' ')+' Hz  '+fmt(vals[i])+'\n';
+  t10+='\n前級 / Preamp: '+pre.toFixed(1)+' dB\n';
+  document.getElementById('out10').textContent=t10;
+
+  var tp='類型          頻率      增益      Q\n';
+  chain.forEach(function(c){ tp+=c.en.padEnd(12,' ')+String(c.f).padStart(6,' ')+' Hz  '+fmt(c.g)+' dB  Q '+c.q.toFixed(2)+'\n'; });
+  tp+='\n前級 / Pre-gain: '+pre.toFixed(1)+' dB\n';
+  document.getElementById('outParam').textContent=tp;
+
+  var tq='Pre-gain: '+pre.toFixed(1)+' dB\n段  類型        頻率      增益      Q\n';
+  chain.forEach(function(c,i){
+    tq+=String(i+1).padEnd(4,' ')+c.en.padEnd(11,' ')+String(c.f).padStart(6,' ')+' Hz  '+fmt(c.g)+' dB  Q '+c.q.toFixed(2)+'\n';
+  });
+  document.getElementById('outQ').textContent=tq;
+
+  draw(ch);
+}
+function draw(ch){
+  var cv=document.getElementById('plot'), g=cv.getContext('2d');
+  var W=cv.width, H=cv.height, pad=28;
+  g.clearRect(0,0,W,H);
+  g.strokeStyle='#2b2e37'; g.lineWidth=1; g.font='10px monospace'; g.fillStyle='#6f7683';
+  var dbTop=12, dbBot=-12;
+  function y(db){ return pad + (dbTop-db)/(dbTop-dbBot)*(H-2*pad); }
+  function x(f){ return pad + (Math.log10(f/20)/Math.log10(20000/20))*(W-2*pad); }
+  for(var db=-12; db<=12; db+=6){
+    g.beginPath(); g.moveTo(pad,y(db)); g.lineTo(W-pad,y(db)); g.stroke();
+    g.fillText((db>0?'+':'')+db, 4, y(db)+3);
+  }
+  [100,1000,10000].forEach(function(f){ g.beginPath(); g.moveTo(x(f),pad); g.lineTo(x(f),H-pad); g.stroke();
+    g.fillText(f>=1000?(f/1000)+'k':''+f, x(f)-8, H-9); });
+  g.strokeStyle='#ff8fb1'; g.lineWidth=2.5; g.beginPath();
+  for(var i=0;i<=240;i++){
+    var f=20*Math.pow(1000, i/240), v=resp(f,ch);
+    if(i===0) g.moveTo(x(f),y(v)); else g.lineTo(x(f),y(v));
+  }
+  g.stroke();
+}
+function setAll(b,m,t,dm,ds){
+  document.getElementById('bass').value=b; document.getElementById('mid').value=m;
+  document.getElementById('tre').value=t;
+  document.getElementById('demud').checked=dm; document.getElementById('desib').checked=ds;
+  document.querySelectorAll('[data-p]').forEach(function(x){ x.classList.remove('on'); });
+  render();
+}
+document.querySelectorAll('[data-p]').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('[data-p]').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    var p=b.dataset.p;
+    if(p==='daily')   setAll(7,3,-4,true,true);
+    if(p==='night')   setAll(4,4,-6,true,true);   // 小聲聽：低頻不用那麼多，高頻再退一點
+    if(p==='commute') setAll(9,5,-3,true,false);  // 吵的環境：低音與中音都推，高頻不特別砍
+    if(p==='earbud')  setAll(5,2,-2,true,true);   // 耳機本來就亮：高音幾乎不砍
+    if(p==='flat')    setAll(0,0,0,false,false);
+  });
+});
+['bass','mid','tre','demud','desib'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', function(){
+    document.querySelectorAll('[data-p]').forEach(function(x){ x.classList.remove('on'); });
+    render();
+  });
+});
+function copyIt(id){
+  var t=document.getElementById(id).textContent;
+  if(navigator.clipboard){ navigator.clipboard.writeText(t); }
+  else { var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select();
+         document.execCommand('copy'); ta.remove(); }
+}
+render();
+</script>
+</body>
+</html>

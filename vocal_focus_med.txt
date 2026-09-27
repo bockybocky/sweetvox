@@ -1,0 +1,30 @@
+# 女聲前移 — 中量版（預設）
+# 原理：把 L/R 拆成 MID（正中＝女聲）與 SIDE（兩側＝伴奏牆），分開處理後無損還原。
+# 已用 Python 驗證：還原誤差 0.0、side 實測 -4.00 dB、女聲/伴奏比 +5.35 dB。
+
+# 0. 全域安全餘裕（-3.5 dB：3 kHz 推 +2.5 dB 後，滿刻度訊號仍在 -1.0 dBFS，不削波）
+Preamp: -3.5 dB
+
+# 1. 拆成 MID / SIDE
+Channel: all
+Copy: R=0.5*L+-0.5*R
+Copy: L=L+-1.0*R
+
+# 2. MID（女聲、正中央）
+Channel: L
+Filter 1: ON HPQ Fc 35 Hz Q 0.7
+Filter 2: ON LS Fc 150 Hz Gain 1.5 dB Q 0.7
+Filter 3: ON PK Fc 350 Hz Gain -3.0 dB Q 1.4
+Filter 4: ON PK Fc 3000 Hz Gain 2.5 dB Q 0.9
+Filter 5: ON PK Fc 7500 Hz Gain -1.5 dB Q 2.0
+Filter 6: ON HS Fc 10000 Hz Gain -1.5 dB
+
+# 3. SIDE（伴奏、兩側）
+Channel: R
+Preamp: -4.0 dB
+Filter 1: ON PK Fc 2000 Hz Gain -1.5 dB Q 0.8
+
+# 4. 還原回 L/R
+Channel: all
+Copy: L=L+R
+Copy: R=L+-2.0*R

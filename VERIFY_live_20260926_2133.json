@@ -1,0 +1,24 @@
+{
+ "measured": {
+  "level_db": -4.863390419863546,
+  "corr_in": 0.17168440378178582,
+  "corr_out": -0.09343456833807813,
+  "residual_mid_db": -600.0,
+  "gain_3k_mid": -1.4984499619364076,
+  "gain_3k_side": -9.636048574312928,
+  "vocal_forward_db": 8.137598612376522,
+  "thd_percent": 0.010523755853898831,
+  "sweep_peak_dbfs": -0.804828,
+  "_config_untouched": true,
+  "_include_untouched": true
+ },
+ "ref_20260925": {
+  "vocal_forward_db": 8.1376,
+  "level_db": -3.9816,
+  "corr_out": -0.18475,
+  "thd_percent": 0.010524,
+  "sweep_peak_dbfs": -0.804828
+ },
+ "config_md5": "9c36ee987de18084b78a1b1c80d45ee0",
+ "include_md5": "970c24a26403e29de605c6a16ebe2888"
+}

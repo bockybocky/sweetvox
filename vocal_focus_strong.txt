@@ -1,0 +1,24 @@
+# 女聲前移 — 濃版（要女聲很前、伴奏退到後面）
+# 兩側低頻也砍掉 → 低頻更置中、更乾淨
+Preamp: -4.5 dB
+
+Channel: all
+Copy: R=0.5*L+-0.5*R
+Copy: L=L+-1.0*R
+
+Channel: L
+Filter 1: ON HPQ Fc 35 Hz Q 0.7
+Filter 2: ON LS Fc 150 Hz Gain 2.0 dB Q 0.7
+Filter 3: ON PK Fc 350 Hz Gain -3.5 dB Q 1.4
+Filter 4: ON PK Fc 3000 Hz Gain 3.5 dB Q 0.9
+Filter 5: ON PK Fc 7500 Hz Gain -1.5 dB Q 2.0
+Filter 6: ON HS Fc 10000 Hz Gain -1.5 dB
+
+Channel: R
+Preamp: -6.0 dB
+Filter 1: ON PK Fc 2000 Hz Gain -2.0 dB Q 0.8
+Filter 2: ON HPQ Fc 100 Hz Q 0.7
+
+Channel: all
+Copy: L=L+R
+Copy: R=L+-2.0*R

@@ -1,0 +1,10 @@
+# 安全版（純 EQ，不拆 MID/SIDE）
+# 用途：萬一 APO 對 Copy 那四行有意見、或想 A/B 比較「有拆中側」的差別時用。
+# 這版不會讓伴奏變小聲，只是讓女聲的頻段比較乾淨。
+Preamp: -3.0 dB
+
+Filter 1: ON HPQ Fc 35 Hz Q 0.7
+Filter 2: ON PK Fc 350 Hz Gain -2.0 dB Q 1.2
+Filter 3: ON PK Fc 3000 Hz Gain 2.5 dB Q 0.9
+Filter 4: ON PK Fc 7500 Hz Gain -1.5 dB Q 2.0
+Filter 5: ON HS Fc 10000 Hz Gain -1.5 dB

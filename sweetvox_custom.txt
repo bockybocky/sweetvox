@@ -1,0 +1,28 @@
+# 甜嗓 SweetVox ─ 女聲前移／通透化（調整台寫入 2026-09-27 12:23:58）
+# 自動餘裕 Preamp -3.0 dB：確保（甜度/溫暖/空氣感）推上去後不削波
+Preamp: -3.0 dB
+
+# 拆成 MID（正中＝女聲）／SIDE（兩側＝伴奏）
+Channel: all
+Copy: R=0.5*L+-0.5*R
+Copy: L=L+-1.0*R
+
+# MID：女聲
+Channel: L
+Filter 1: ON HPQ Fc 35 Hz Q 0.7
+Filter 2: ON LS Fc 150 Hz Gain 1.0 dB Q 0.7
+Filter 3: ON PK Fc 350 Hz Gain -2.0 dB Q 1.4
+Filter 4: ON PK Fc 3000 Hz Gain 1.5 dB Q 0.9
+Filter 5: ON PK Fc 7500 Hz Gain 0.0 dB Q 2.0
+Filter 6: ON HS Fc 10000 Hz Gain 1.0 dB
+
+# SIDE：伴奏
+Channel: R
+# 只在女聲頻段（2.5 kHz 附近）退兩側：低頻與極高頻的立體感、殘響留下來
+Filter 1: ON PK Fc 2500 Hz Gain -6.0 dB Q 0.7
+Filter 2: ON PK Fc 2000 Hz Gain -1.5 dB Q 0.8
+
+# 還原回 L/R
+Channel: all
+Copy: L=L+R
+Copy: R=L+-2.0*R

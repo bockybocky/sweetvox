@@ -1,0 +1,19 @@
+女聲前移／通透化 — 削波安全驗證（重修版）
+工具：Equalizer APO Benchmark，滿刻度線性掃頻 1–20 kHz、5 秒
+公式：最壞情況 = max(mid 鏈峰值, side 鏈峰值)（舊版誤用平均 → 低估 1 dB 造成削波）
+安全邊界 SAFE_MARGIN_DB = 1.0（實測掃出：1.0/1.5/2.0/2.5 全部通過；採用 1.5，多留 0.5 dB 餘裕）
+
+預設(-7)           Preamp  -4.00 dB → 實測峰值  -0.73 dBFS  OK
+淡(-4)            Preamp  -3.50 dB → 實測峰值  -0.65 dBFS  OK
+濃(-11)           Preamp  -4.90 dB → 實測峰值  -1.18 dBFS  OK
+預設+補償-6          Preamp  -9.50 dB → 實測峰值  -6.73 dBFS  OK
+預設+補償+6          Preamp  -4.00 dB → 實測峰值  -0.73 dBFS  OK
+VST開             Preamp  -6.80 dB → 實測峰值  -3.53 dBFS  OK
+VST+補償+6         Preamp  -4.00 dB → 實測峰值  -0.73 dBFS  OK
+全推到底+6           Preamp  -8.00 dB → 實測峰值  -1.98 dBFS  OK
+全推+VST+6         Preamp  -8.00 dB → 實測峰值  -1.98 dBFS  OK
+濃+VST+6          Preamp  -4.90 dB → 實測峰值  -1.18 dBFS  OK
+伴奏不退(0)          Preamp  -4.00 dB → 實測峰值  -0.73 dBFS  OK
+伴奏退到底(-15)       Preamp  -4.00 dB → 實測峰值  -0.73 dBFS  OK
+
+結論：全部不削波 ✅

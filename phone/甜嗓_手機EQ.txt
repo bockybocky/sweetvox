@@ -1,0 +1,54 @@
+甜嗓 SweetVox — 手機版 EQ（加深重音 / 抬中音 / 少高音）
+用途：手機播 YouTube Music。手機的 EQ 只能由『系統級 EQ App』或『帶 PEQ 的藍牙 DAC』套用。
+====================================================================
+
+【格式 1】10 段圖形 EQ（Wavelet、內建音效、多數 App 直接照著拉）
+    頻率(Hz)   增益(dB)
+         31     +6.9
+         62     +6.2
+        125     +2.5
+        250     -0.8
+        500     -0.2
+       1000     +2.7
+       2000     +2.7
+       4000     +2.1
+       8000     -2.8
+      16000     -3.9
+
+    播放器 Preamp / 前級：-7.0 dB
+
+【格式 2】參數式 EQ（Wavelet 自訂、RootlessJamesDSP、Poweramp、Qudelix 5K）
+    類型    頻率       增益       Q
+    Low Shelf    110 Hz   +7.0 dB  Q 0.70
+    Peaking      350 Hz   -2.5 dB  Q 1.40
+    Peaking     1000 Hz   +2.5 dB  Q 0.90
+    Peaking     3000 Hz   +3.0 dB  Q 0.90
+    Peaking     7500 Hz   -2.0 dB  Q 1.60
+    High Shelf   9000 Hz   -4.0 dB  Q 0.70
+
+【甜嗓的記號（為什麼不只三個旋鈕）】
+    350 Hz -2.5 dB  去掉悶濁，人聲才會『乾淨地往前站』
+    3 kHz  +3.0 dB  女聲甜度（這一格是甜嗓的招牌）
+    7.5 kHz -2.0 dB 收齒音，尖銳的ㄕㄘ音變柔
+    9 kHz 以上 -4 dB 高音整體退一步（你要的『高音少些』）
+
+【格式 3】Qudelix 5K PEQ（iPhone 唯一能動 YouTube Music 的走法：EQ 做在硬體裡）
+    Qudelix App → 5K DAC AMP → Equalizer → PEQ（機器內建 20 段，填下面 6 段就夠）
+    Pre-gain: -7.0 dB
+    段數  類型        頻率       增益      Q
+    1     Low Shelf     110 Hz   +7.0 dB  Q 0.70
+    2     Peaking       350 Hz   -2.5 dB  Q 1.40
+    3     Peaking      1000 Hz   +2.5 dB  Q 0.90
+    4     Peaking      3000 Hz   +3.0 dB  Q 0.90
+    5     Peaking      7500 Hz   -2.0 dB  Q 1.60
+    6     High Shelf   9000 Hz   -4.0 dB  Q 0.70
+
+【iPhone 上的替代方案（不花錢的）】
+    · iOS 的『耳機調節』(設定→輔助使用→音訊/視覺) 只有 AirPods/Beats 這類支援的耳機才生效，
+      而且只能套預設幾檔或上傳聽力圖，形狀不夠自由 → 只能當粗略版
+    · 換播放器：Spotify 有內建 EQ、Apple Music 有 23 組預設 EQ（但就不是 YouTube Music 了）
+
+【怎麼套用】
+  安卓：安裝 Wavelet → Custom / Graphic EQ 照上面拉；或 RootlessJamesDSP（需 Shizuku 或 ADB 授權）
+  iPhone：系統不允許第三方 App 動聲音 → 只能用帶 PEQ 的藍牙 DAC（如 Qudelix 5K）輸入上面的參數式 EQ
+  有線耳機/喇叭接手機：同樣是上面的 App 或硬體 PEQ，跟播放軟體無關

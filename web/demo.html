@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>甜嗓 SweetVox — 本機試用頁</title>
+<style>
+  /* 這一段只是試用頁自己的底色，跟 sweetvox.js 無關（Iris 的部落格不用這份） */
+  body{margin:0;padding:16px;background:#f6f7f9;color:#1d1f24;
+       font-family:system-ui,-apple-system,"Segoe UI","Microsoft JhengHei UI",sans-serif}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:15px;font-weight:600;color:#5c6472;margin:0 0 10px}
+  @media (prefers-color-scheme:dark){ body{background:#0e0f12;color:#e9eaee} h1{color:#98a0ad} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>本機試用頁（demo.html）— 只載入 sweetvox.js，介面全部由它自己長出來</h1>
+
+    <div data-lab-demo="sweetvox" data-lang="zh-TW"></div>
+  </div>
+  <script defer src="sweetvox.js"></script>
+</body>
+</html>
