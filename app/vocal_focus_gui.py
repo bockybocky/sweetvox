@@ -72,9 +72,174 @@ def side_db_to_pct(db):
     return int(max(0.0, min(100.0, round(-float(db) / PCT_MAX_DB * 100.0))))
 
 # air = 10 kHz 以上高頻擷架（空氣感／通透），dB
+# 2026-10-08 房間量測的結論：63–200 Hz 隆起 +6~+14 dB，但**正確解法是窄陷波打峰**
+# （room63 Q5.0 / room125 Q1.4），不是用 warm 寬削整段低頻。
+#   曾經試過把所有模式的 warm 下移 6 dB（寬削）→ 量測顯示 80~160 Hz 被挖出一個洞，
+#   最佳化（從實測反推房間曲線再解）給出 warm 回到 +2.0、靠兩顆窄濾波器處理峰，RMS 偏差 5.58→2.36 dB。
+#   所以 warm 的預設值維持原樣，那個下移的改動已經撤回。
+# room63 / room125 是量測得來的房間修正；**不放進任何模式**，按模式鈕時會保留
+#   （房間修正是房間的屬性，不是聆聽模式的屬性）。預設 0＝行為與舊版完全一致。
+# ── 方法論（介面上的另一頁）──
+# 寫在程式裡而不是外部檔案：這樣不管把 vocal_focus_gui.py 複製到哪台機器，
+# 「為什麼這樣調」都跟著走。內容與 docs/room-measurement.md 同源。
+METHOD_TEXT = """【一】這個專案最大的一次改善：量房間
+
+訊號鏈每一段都調過、EQ 參數在 ±2 dB 裡反覆微調了好幾天。
+然後量了房間 —— 63～200 Hz 隆起 +6 ~ +14 dB。
+
+    我們拿放大鏡在修一面有裂縫的牆。
+
+修掉之後，實聽評語從「好聽」變成「超好聽」。
+那是整個專案裡最大的一次改善，而它花的時間比之前任何一次微調都短。
+
+
+【二】量房間的八個步驟
+
+不需要校正過的量測麥克風。需要的是：一支任何麥克風、一個腳架
+（腳架比麥克風重要），和一個「先證明尺是準的，再拿它量東西」的紀律。
+
+第 0 步  任何麥克風都行，但一定要有腳架，而且要能用程式切 EQ 開關。
+
+第 1 步  關掉麥克風所有「增強功能」。這步沒做，後面全部白費。
+         怎麼確認：播大聲一點，錄到的也要變大。
+         如果「播更大聲、錄到反而更小」，那是 AGC 還開著 ——
+         實測 amp=0.12 錄到 −45.6 dBFS，amp=0.18 卻只有 −50.0 dBFS。
+         有 AGC 不是「量得不準」，是完全沒有意義（量測鏈變成非線性）。
+
+第 2 步  麥克風固定在你平常聽音樂的頭部位置，之後不要再碰它。
+         這是整份方法論最重要的一句話。同一支麥克風、同一個房間，
+         差別只在兩次量測之間它有沒有動：
+             · 戴在頭上、人走過去按 EQ → 平均誤差 3.18 dB
+             · 固定在腳架、切換由程式做 → 平均誤差 0.84 dB
+         差 4 倍。因為 350 Hz 的波長約 1 公尺，移動 10 公分就改變駐波圖樣。
+
+第 3 步  先校正尺，再量東西。不要先量房間。
+         做法：EQ 開一次、關一次，兩次相減。
+         差值應該精確等於你 EQ 的設計曲線（那條你算得出來）。
+         麥克風的誤差、喇叭的響應、房間本身，在相減時全部抵消 ——
+         這就是「不需要校正麥克風」的原因。
+             · 通過：平均絕對誤差 0.84 dB（設計曲線總起伏 3.43 dB）
+             · 失敗：平均絕對誤差 3.18 dB，連正負號都相反
+         誤差跟訊號同量級 = 這把尺量不出你要量的東西，
+         這時候得到的任何「房間曲線」都是假的。
+
+第 4 步  量房間（EQ 關閉）：25 秒指數掃頻（ESS）＋ 反摺積。
+         為什麼不用噪音：ESS 的反摺積會把非線性失真（諧波）推到脈衝響應
+         的「負時間」去，跟線性部分分開 —— 喇叭有失真也不污染曲線。
+         音量要高於環境噪音但不削波，目標峰值約 −20 dBFS。
+
+第 5 步  分辨「這是房間」還是「這是麥克風」：把麥克風移開 50 公分再量一次。
+             房間駐波跟位置強烈相關 → 會變
+             麥克風自己的響應跟位置無關 → 不會變
+         實測：低頻（≤315 Hz）移動後平均變 4.0 dB → 房間
+               高頻（≥2.5 kHz）移動後平均變 1.2 dB → 麥克風
+         所以曲線上 6.3 kHz 的 +7.9 dB 是麥克風的臨場感提升，不是房間，
+         千萬不要去 EQ 它。沒做這步就照曲線修高頻，是最容易犯的錯。
+
+第 6 步  決定修哪裡。
+         能修的：峰。房間的隆起（駐波腹部）用 EQ 削很有效。
+         不能修的：凹陷。實測 40 Hz −19 dB、50 Hz −11 dB 不要碰 ——
+         那裡的聲波在你耳朵的位置互相抵消，推多少電力進去都抵消得掉，
+         你只會讓喇叭在聽不到的頻率上做白工，甚至失真。
+         凹陷要靠移動喇叭或座位解決，不是 EQ。
+
+第 7 步  算出修正量，不要猜。既然第 3 步證明這把尺準，就可以反推：
+             房間原始曲線 = 實測曲線 − 目前 EQ 的設計響應
+             最佳參數     = 讓「原始曲線 + 新 EQ」最接近平坦的那組
+         搜尋時一定要讓 Q 也進入搜尋。這是最大的教訓：
+             · 寬的低頻架式濾波器削整段 → 50–250 Hz 偏差 5.09 dB
+             · 窄濾波器但 Q 固定 1.0 → 偏差 3.81 dB
+             · 讓 Q 自由（解出 Q=5.0）→ 偏差 2.36 dB　← 最好
+         原因：+13 dB 的峰在 63 Hz，而旁邊 50 Hz 是凹陷。
+         Q 太寬，削峰的同時會把凹陷挖更深。
+         放開 Q 之後有個反直覺的結果：低頻架式濾波器反而可以回到 +2.0 dB ——
+         用窄濾波器精準打掉峰之後，低頻的厚度回來了，但轟隆的峰被壓住。
+
+第 8 步  套用、再量一次、最後用耳朵驗收。
+             · 63 Hz：+9.0 → +0.1 dB
+             · 80 Hz：+2.3 → +1.9 dB
+             · 125 Hz：+6.3 → +1.3 dB
+             · 200 Hz：+2.1 → +3.7 dB
+         63–200 Hz 全部收在 ±4 dB 內。
+         最後一關一定是耳朵。量測告訴你「哪裡錯了」和「改了多少」，
+         但「這樣好不好聽」只有你能回答。平不一定等於好聽。
+
+
+【三】實測否決掉的方法（留著當紀錄，不要重做）
+
+真空管暖度（PurestWarm）
+    加了 0.73% THD、立體相關拉到 +0.83（音場塌下來）。
+    「發燒」模式就是為了關掉它而生的。控制項已從畫面撤掉。
+
+通透：Airwindows Air
+    需要外掛 DLL、吃掉 4.6 dB 音量再自動補回來。不划算，撤掉。
+
+第 2 層：動態側鏈壓縮
+    離線算出來的最佳曲線跟靜態的差不到 1 dB，聽不出來。不值得。
+
+第 3 層：即時人聲分離（StemgenRT-5.8）
+    技術上成功：延遲 29 ms、真峰 −1.00 dBFS、62 萬 hop 只 1 次 underrun、CPU 3.4%。
+    但 M-DAC 會從 USB 掉下來造成爆音，所以不用這一層。
+    另外一個重要的更正：criterion A 量的是「中央 vs 兩側」，
+    不是「人聲 vs 伴奏」。用同一把尺重量之後，
+    靜態 mid/side 的真實人聲／伴奏比是 +0.07 dB，兩者其實打平。
+
+
+【四】常見錯誤一覽
+
+  · 麥克風有 AGC
+      症狀：曲線亂、兩次量測對不起來
+      怎麼發現：播大聲一點，看錄到的有沒有也變大
+  · 兩次量測之間麥克風動了
+      症狀：校正測試的誤差跟訊號同量級
+      怎麼發現：做第 3 步
+  · 麥克風沒在聆聽位置
+      症狀：數字漂亮但調完不好聽
+      怎麼發現：想清楚你要量的是誰的耳朵
+  · 把麥克風的響應當成房間
+      症狀：照著修高頻，越修越怪
+      怎麼發現：做第 5 步（移開 50 cm）
+  · 去填補凹陷
+      症狀：低頻失真、喇叭過載，聽感沒改善
+      怎麼發現：凹陷不要碰就對了
+  · Q 固定不搜尋
+      症狀：削了峰，旁邊被挖洞
+      怎麼發現：讓 Q 進入最佳化
+  · 錄放用同一個全域串流
+      症狀：永遠錄到靜音，誤判成線路不通
+      怎麼發現：用兩個獨立的 stream
+
+最後一條值得展開：在 Python 的 sounddevice 裡，
+sd.play() / sd.rec() / sd.playrec() 共用模組層的同一個全域串流槽，
+後呼叫的會把前一個停掉。要同時放與錄，必須自己開兩個獨立的
+sd.InputStream 與 sd.OutputStream。
+
+
+【五】寫入設定的鐵則
+
+  1. 絕對不手改 Equalizer APO 的 live 設定檔。
+     一律走 讀 state → apply_preset() → build_config() → write_files()。
+  2. 寫完一定逐行比對實際生效的設定檔，差異必須是 0 行 ——
+     確認「你以為在跑的」等於「真的在跑的」。
+  3. 任何正增益都要用 Preamp 抵掉，再留 1 dB 餘裕。
+  4. A/B 比較一定要等響度，不然你聽到的只是「比較大聲」。
+  5. 只用官方 Equalizer APO，不用 VST3 分支。
+  6. 不要用 ASIO／獨佔模式的播放器驗收（那條路繞過 APO）。
+
+工具
+  · tools/room_sweep.py → ESS 掃頻、反摺積、1/6 八度平滑、兩次相減
+  · tools/set_bypass.py → 用程式切 EQ 開/關（人不要進房間）
+  · tools/set_param.py → 改單一參數，走跟主程式相同的寫入與驗收路徑
+"""
+
+# V2.0：加入「用未校正麥克風量房間、相減校正、只削峰不填谷」那條鏈 ——
+#       這是整個專案最大的一次改善（實聽從「好聽」變「超好聽」）。
+VERSION = "V2.0"
+
 DEFAULTS = dict(side=-7.0, sweet=1.2, mud=-3.0, sib=-1.0, warm=1.5, air=2.0,
                 gain=0.0, vst_air=False, tube=True, tube_drive=6.0,
-                centerbass=False, on=True, side_band=False, piano=False)
+                centerbass=False, on=True, side_band=False, piano=False,
+                room63=0.0, room125=0.0)
 
 # 鋼琴模式的旋鈕標籤（同一顆旋鈕、換中心頻率）：只在 piano=True 時顯示
 PIANO_LABELS = {"warm": "厚度 150 Hz", "mud": "低中頻 250", "sweet": "琴槌 3.5 kHz",
@@ -85,6 +250,14 @@ TUBE_AUTO_DB  = 3.0   # 勾「通透」時自動加的音量補償
 GAIN_CEIL_DB  = 1.0   # 「整體音量補償」最多能往上推多少。滿刻度掃頻實測校準（tools/calibrate_gain_ceiling.py）：
                       # 乾淨鏈 +1.0 → 峰值 −0.80 dBFS（+1.5 就 −0.30＝削波）；這條鏈原本的 Air 上限 3.2 也保留
                       # ⚠ 只能定義這一份：前面給 PRESETS 用、下面給 build_config 用（曾在下面又多定義一次 → 預設與實際不一致）
+
+# 介面上不顯示的模式：留在 PRESETS 裡（舊的 state.json 與開機模式判定都還能用），
+# 只是主畫面不放按鈕 —— 淡/中/濃 彼此只差 side 與 sweet 的幾 dB，實際使用只在
+# 「發燒」「深夜甜嗓」「鋼琴」之間切。
+HIDDEN_PRESETS = ("淡", "中", "濃")
+
+# 按鈕上的顯示文字（鍵名不能動：測試與既有 state.json 都靠它比對）
+PRESET_LABELS = {"發燒": "發燒（人聲）"}
 
 PRESETS = {
     "淡": dict(side=-4.0, sweet=1.0, mud=-2.0, sib=-0.8, warm=1.0, air=1.0, centerbass=False, subcut=35.0),
@@ -103,7 +276,9 @@ PRESETS = {
     "鋼琴（發燒）": dict(piano=True, side=0.0, warm=0.0, mud=-1.5, sweet=0.0, sib=0.0, air=0.0,
                    subcut=0.0, centerbass=False, tube=False, tube_drive=0.0, vst_air=False,
                    gain=0.0, side_band=False),
-    "發燒": dict(side=-6.0, sweet=1.5, mud=-2.0, sib=0.0, warm=1.0, air=1.0,
+    # 2026-10-08：warm 1.0 → 2.0，對齊他實際在用、且實聽確認「超好聽」的那一組。
+    # （低頻的峰交給 room63/room125 兩顆窄濾波器處理，所以 150 Hz 可以留著厚度）
+    "發燒": dict(side=-6.0, sweet=1.5, mud=-2.0, sib=0.0, warm=2.0, air=1.0,
                centerbass=False, subcut=35.0, tube=False, tube_drive=0.0, vst_air=False,
                gain=GAIN_CEIL_DB, side_band=True),
 }
@@ -229,6 +404,25 @@ def build_config(v):
         L.append("# 避免只延遲正中造成的梳狀濾波。注意它會讓整體音量掉約 4~5 dB，用『整體音量補償』補回。")
         L.append(f'VSTPlugin: Library "{VST_AIR}"')
         L.append("")
+    # 房間修正（2026-10-08 加）：量測顯示 63–200 Hz 隆起 +6~+14 dB，
+    # 移動麥克風 50 cm 再量一次確認是房間不是麥克風。
+    # 放在**拆中側之前的 Channel: all**：房間的隆起左右都有，必須兩聲道等量削，
+    # 不能只削 MID（那樣兩側的低頻會留著）。只能削不能加（滑桿上限 0），所以不影響削波餘裕。
+    # 第二顆原本放 200 Hz，那是依「麥克風移開 50 cm」那次的數字選的——不是他聽歌的位置。
+    # 聆聽位置實測：63 Hz +9.0、125 Hz +6.3、200 Hz 只有 +2.1 → 改成 125 Hz。
+    # 63 Hz 用 Q5.0（窄）：那是個 +13 dB 的窄峰，旁邊 50 Hz 反而是凹陷 —— 用寬的會把凹陷挖更深。
+    # 最佳化（從實測反推房間原始曲線再解）：Q 固定 1.0 時最好只能到 3.81 dB RMS 偏差，
+    # 放開 Q 之後 Q5.0 可以到 2.36 dB，而且讓 warm 回到 +2.0（低頻厚度回來、峰仍被壓住）。
+    room = [(63.0, float(v.get("room63", 0.0)), 5.0),
+            (125.0, float(v.get("room125", 0.0)), 1.4)]
+    room = [r for r in room if abs(r[1]) > 0.05]
+    if room:
+        L.append("# 房間修正：左右兩聲道等量（量測得來，不是憑耳朵）")
+        L.append("Channel: all")
+        for i, (f0, g, q) in enumerate(room, start=1):
+            L.append(f"Filter {i}: ON PK Fc {f0:.0f} Hz Gain {g:.1f} dB Q {q}")
+        L.append("")
+
     L.append("# 拆成 MID（正中＝女聲）／SIDE（兩側＝伴奏）")
     L.append("Channel: all")
     L.append("Copy: R=0.5*L+-0.5*R")
@@ -368,7 +562,7 @@ class App:
             pass
         for k, val in DEFAULTS.items():        # 舊 state.json 沒有 air 就補上
             self.v.setdefault(k, val)
-        root.title("甜嗓 SweetVox — 調整台")
+        root.title(f"甜嗓 SweetVox {VERSION} — 調整台")
         # 依真實 DPI 放大（宣告 DPI 感知後，Tk 才知道要畫多大才不會被系統拉伸）
         self.dpi = root.winfo_fpixels("1i")
         self.s = max(1.0, self.dpi / 96.0)
@@ -387,8 +581,10 @@ class App:
                  font=("Microsoft JhengHei UI", 19, "bold")).pack(side="left")
         tk.Label(head, text=" SweetVox", bg=BG, fg=TXT,
                  font=("Microsoft JhengHei UI", 12)).pack(side="left", pady=(7, 0))
-        tk.Label(head, text="女聲前移 · 通透 · 真空管暖度", bg=BG, fg=DIM,
-                 font=("Microsoft JhengHei UI", 9)).pack(side="left", padx=(12, 0), pady=(9, 0))
+        tk.Label(head, text=VERSION, bg=BG, fg=ACCENT2,
+                 font=("Microsoft JhengHei UI", 11, "bold")).pack(side="left", padx=(6, 0), pady=(7, 0))
+        tk.Label(head, text="女聲前移 · 房間修正", bg=BG, fg=DIM,
+                 font=("Microsoft JhengHei UI", 9)).pack(side="left", padx=(10, 0), pady=(9, 0))
         self.status = tk.Label(head, text="", bg=BG, fg=OK, justify="right",
                                font=("Microsoft JhengHei UI", 10, "bold"), wraplength=240)
         self.status.pack(side="right")
@@ -400,14 +596,19 @@ class App:
                                 activebackground="#ffa9c6", activeforeground="#20131a", relief="flat",
                                 bd=0, pady=7, font=("Microsoft JhengHei UI", 10, "bold"))
         self.ab_btn.pack(side="left", padx=(8, 4), pady=8)
+        self._meth_win = None        # 方法論那一頁（同時只開一個）
         self.preset_btns = {}
         for name in PRESETS:
-            b = tk.Button(bar, text=name, width=10, command=lambda n=name: self.apply_preset(n),
+            b = tk.Button(bar, text=PRESET_LABELS.get(name, name), width=12,
+                          command=lambda n=name: self.apply_preset(n),
                           bg=CARD2, fg=TXT, activebackground=ACCENT2, activeforeground="#201a10",
                           relief="flat", bd=0, pady=7)
-            b.pack(side="left", padx=3, pady=8)
+            # 淡/中/濃：建立但不放上畫面。鍵名與按鈕物件都保留（模式判定、亮燈、測試都照常），
+            # 只是主畫面不顯示 —— 它們彼此只差 side 與 sweet 幾 dB，實際只在發燒/深夜/鋼琴之間切。
+            if name not in HIDDEN_PRESETS:
+                b.pack(side="left", padx=3, pady=8)
             self.preset_btns[name] = b
-        tk.Button(bar, text="重設", width=5, command=self.reset, bg=CARD2, fg=DIM,
+        tk.Button(bar, text="重設旋鈕", width=8, command=self.reset, bg=CARD2, fg=DIM,
                   activebackground=CARD2, relief="flat", bd=0,
                   pady=7).pack(side="left", padx=(8, 6), pady=8)
 
@@ -472,6 +673,11 @@ class App:
 
         self.sliders = {}
         self.slider_lbl = {}
+        # 退休的控制項放這裡：這個 Frame 永遠不 pack，所以畫面上看不到，
+        # 但 self.sliders["side"]、self.tube_cb、self.tube_sc 等都照常建立 ——
+        # apply_preset、_paint_controls、以及既有測試都不受影響。
+        retired = tk.Frame(root, bg=CARD)
+
         sec1 = section("女聲（正中那條鏈）")
         slider(sec1, "sweet", "女聲甜度 3k", -2.0, 6.0, 0.5)
         slider(sec1, "mud", "去濁 350 Hz", -7.0, 0.0, 0.5)
@@ -479,7 +685,9 @@ class App:
         slider(sec1, "air", "空氣感 10k+", -2.0, 4.0, 0.5)
 
         sec2 = section("伴奏（兩側）與音量")
-        slider(sec2, "side", "伴奏退後量", 0.0, -PCT_MAX_DB, 0.5)
+        # 「伴奏退後量」退休：它跟最上面那顆「女聲控制」是同一個參數的兩種刻度，
+        # 同一件事放兩個控制項只會讓人困惑。女聲控制那顆仍然完整可用。
+        slider(retired, "side", "伴奏退後量", 0.0, -PCT_MAX_DB, 0.5)
         self.cb = tk.BooleanVar(value=bool(self.v["centerbass"]))
         tk.Checkbutton(sec2, text="低頻置中（兩側 100 Hz 以下砍掉）", variable=self.cb,
                        command=self.on_cb, bg=CARD, fg=TXT, selectcolor=CARD2,
@@ -492,14 +700,34 @@ class App:
                        anchor="w").pack(fill="x", padx=12)
         slider(sec2, "gain", "整體音量補償", -6.0, 6.0, 0.5)
 
-        sec3 = section("溫暖與通透（真空管）")
-        slider(sec3, "warm", "溫暖 150 Hz", 0.0, 4.0, 0.5)
+        sec3 = section("低頻厚度")
+        # 2026-10-08：下限從 0.0 放到 -6.0。房間量測顯示 63–200 Hz 隆起 +6~+14 dB
+        # （移動麥克風 50 cm 再量一次，確認是房間不是麥克風），所以這顆需要能「削」不只是「加」。
+        # 實測 warm=-5 把 63–200 Hz 的平均從 +10.3 dB 壓到 +4.5 dB，他聽過說好聽。
+        slider(sec3, "warm", "溫暖 150 Hz", -6.0, 4.0, 0.5)
+
+        # 房間修正（2026-10-08 加）：150 Hz 那顆架式壓不到 63 Hz 與 200 Hz 的兩個殘留峰。
+        # 只能削不能加（上限 0）→ 不影響既有的削波餘裕計算。作用在左右兩聲道。
+        sec_room = section("房間修正（量測得來，不是憑耳朵）")
+        rowr = tk.Frame(sec_room, bg=CARD2)      # 底色加深一階，讓這盞燈從卡片上跳出來
+        rowr.pack(fill="x", padx=12, pady=(2, 6))
+        self.room_lamp = tk.Label(rowr, text="●", bg=CARD2, fg=DIM,
+                                  font=("Microsoft JhengHei UI", 22))
+        self.room_lamp.pack(side="left", padx=(10, 0), pady=6)
+        self.room_lamp_txt = tk.Label(rowr, text="", bg=CARD2, fg=DIM, anchor="w",
+                                      justify="left",
+                                      font=("Microsoft JhengHei UI", 11, "bold"))
+        self.room_lamp_txt.pack(side="left", padx=(8, 0), pady=6)
+        slider(sec_room, "room63", "房間 63 Hz", -16.0, 0.0, 0.5)
+        slider(sec_room, "room125", "房間 125 Hz", -16.0, 0.0, 0.5)
         self.tube_cb = tk.BooleanVar(value=bool(self.v.get("tube")))
-        tk.Checkbutton(sec3, text="真空管暖度（PurestWarm：實測偶次諧波＝暖，不是刺）",
+        # 真空管退休：2026-09-25 的實測 —— 加了 0.73% THD、立體相關拉到 +0.83（音場塌），
+        # 「發燒」模式就是為了關掉它而生的。參數保留，畫面不放。
+        tk.Checkbutton(retired, text="真空管暖度（PurestWarm：實測偶次諧波＝暖，不是刺）",
                        variable=self.tube_cb, command=self.on_tube, bg=CARD, fg=TXT,
                        selectcolor=CARD2, activebackground=CARD, activeforeground=TXT,
                        anchor="w").pack(fill="x", padx=12)
-        rowt = tk.Frame(sec3, bg=CARD)
+        rowt = tk.Frame(retired, bg=CARD)
         rowt.pack(fill="x", padx=12)
         tk.Label(rowt, text="真空管推力", bg=CARD, fg=TXT, width=13, anchor="w").pack(side="left")
         self.tube_val = tk.Label(rowt, text="", bg=CARD, fg=ACCENT2, width=8, anchor="e",
@@ -510,11 +738,12 @@ class App:
                                  command=self.on_tube_drive)
         self.tube_sc.set(float(self.v.get("tube_drive", 0.0)))
         self.tube_sc.pack(side="left")
-        self.tube_info = tk.Label(sec3, text="", bg=CARD, fg=DIM, anchor="w",
+        self.tube_info = tk.Label(retired, text="", bg=CARD, fg=DIM, anchor="w",
                                   font=("Microsoft JhengHei UI", 8))
         self.tube_info.pack(fill="x", padx=12)
         self.vst_cb = tk.BooleanVar(value=bool(self.v.get("vst_air")))
-        tk.Checkbutton(sec3, text="通透：加 Airwindows Air（勾了自動補 3 dB 音量）", variable=self.vst_cb,
+        # Air 外掛退休：需要外掛 DLL、吃掉 4.6 dB 音量再自動補回來。參數保留，畫面不放。
+        tk.Checkbutton(retired, text="通透：加 Airwindows Air（勾了自動補 3 dB 音量）", variable=self.vst_cb,
                        command=self.on_vst, bg=CARD, fg=TXT, selectcolor=CARD2,
                        activebackground=CARD, activeforeground=TXT,
                        anchor="w").pack(fill="x", padx=12, pady=(0, 8))
@@ -528,8 +757,14 @@ class App:
         tk.Button(foot, text="匯出這組設定", command=self.export, bg=CARD2, fg=TXT,
                   activebackground=ACCENT, activeforeground="#20131a", relief="flat", bd=0,
                   pady=7).pack(side="left", padx=6)
-        self.preamp_lbl = tk.Label(foot, text="", bg=BG, fg=DIM, font=("Microsoft JhengHei UI", 9))
-        self.preamp_lbl.pack(side="right")
+        tk.Button(foot, text="方法論（為什麼這樣調）", command=self.show_method, bg=CARD2, fg=TXT,
+                  activebackground=ACCENT, activeforeground="#20131a", relief="flat", bd=0,
+                  pady=7).pack(side="left")
+        # Preamp 這行自己佔一列。跟三顆鈕擠同一列時右半句（「峰值 ≤ -1 dBFS」）會被切掉，
+        # 而那正是這行要講的重點。
+        self.preamp_lbl = tk.Label(root, text="", bg=BG, fg=DIM, anchor="w",
+                                   font=("Microsoft JhengHei UI", 9))
+        self.preamp_lbl.pack(fill="x", padx=16, pady=(6, 0))
         self.measure_lbl = tk.Label(root, text="", bg=BG, fg="#8fc7ff", justify="left",
                                     wraplength=660, font=("Microsoft JhengHei UI", 9))
         self.measure_lbl.pack(pady=(2, 10))
@@ -540,12 +775,21 @@ class App:
         # 版面依實際內容自動收邊（含 150% 縮放）；高度不夠會被切、太高會留一大片空白
         root.update_idletasks()
         w = int(700 * self.s)
-        h = max(root.winfo_reqheight() + int(110 * self.s), int(520 * self.s))
-        root.geometry(f"{w}x{h}")
-        root.minsize(w, h)
+        self._win_w = w
+        self._fit_window()
         root.configure(bg=BG)
 
     # ---- 事件 ----
+    def _fit_window(self):
+        """依實際內容收邊。量測訊息欄平常是空的，先留 110 px 只會在底下空一大片；
+        等真的有訊息（可能好幾行）再長高，所以每次改訊息都要再呼叫一次。"""
+        self.root.update_idletasks()
+        w = getattr(self, "_win_w", int(700 * self.s))
+        h = max(self.root.winfo_reqheight() + int(16 * self.s), int(520 * self.s))
+        self.root.minsize(w, int(520 * self.s))      # 先放寬，否則縮不回去
+        self.root.geometry(f"{w}x{h}")
+        self.root.minsize(w, h)
+
     def _sync_pct_from_state(self):
         """把「女聲控制」那顆拉到跟 side 一致（過程中不要讓它的回呼又回寫）"""
         sc = getattr(self, "pct_sc", None)
@@ -660,11 +904,13 @@ class App:
                            bg=(ACCENT if self.v["on"] else CARD2),
                            fg=("#20131a" if self.v["on"] else TXT))
         self._paint_presets()               # 原聲時模式鈕不該還亮著（他 2026-09-25 指出）
+        self._paint_room()
         self.refresh_labels()               # 原聲時數字／旋鈕／勾選項全部歸零顯示（值保留）
 
     def _mark_preset(self, name):
         self._preset_name = name
         self._paint_presets()
+        self._paint_room()
 
     @staticmethod
     def _gain_room(v):
@@ -702,6 +948,26 @@ class App:
         for n, b in getattr(self, "preset_btns", {}).items():
             hit = (n == name)
             b.config(bg=(ACCENT if hit else CARD2), fg=("#20131a" if hit else TXT))
+
+    def _paint_room(self):
+        """房間修正燈。語意跟模式鈕一致：亮＝這組值現在真的在跑。
+        切回原聲時整條鏈沒作用 → 燈熄（值保留）。兩顆都 0 → 視為沒設定。"""
+        if not hasattr(self, "room_lamp"):
+            return
+        r63 = float(self.v.get("room63", 0.0))
+        r125 = float(self.v.get("room125", 0.0))
+        has = abs(r63) > 0.05 or abs(r125) > 0.05
+        running = bool(self.v.get("on")) and has
+        if running:
+            self.room_lamp.config(fg=OK)
+            self.room_lamp_txt.config(
+                text=f"房間修正作用中\n63 Hz {r63:+.1f} dB　125 Hz {r125:+.1f} dB（左右兩聲道）", fg=OK)
+        elif has:
+            self.room_lamp.config(fg=DIM)
+            self.room_lamp_txt.config(text="房間修正已設定\n但目前是原聲，整條鏈沒作用", fg=DIM)
+        else:
+            self.room_lamp.config(fg=DIM)
+            self.room_lamp_txt.config(text="房間修正未設定\n先量過房間再調，不要憑耳朵猜", fg=DIM)
 
     def _paint_controls(self):
         """控制項的位置＝「現在真的在跑什麼」：原聲時一律回到中性（值本身不動，切回來就彈回去）。
@@ -798,7 +1064,11 @@ class App:
         self.refresh_labels(); self.apply()
 
     def reset(self):
-        self.v.update(DEFAULTS); self.cb.set(bool(self.v["centerbass"]))
+        # 房間修正是**房間**的屬性，不是聆聽模式的屬性（跟模式鈕同一條規則）。
+        # 它是量出來的，重設旋鈕不該把量測結果一起丟掉 —— 要改請用房間修正那一區。
+        keep = {k: self.v[k] for k in ("room63", "room125") if k in self.v}
+        self.v.update(DEFAULTS); self.v.update(keep)
+        self.cb.set(bool(self.v["centerbass"]))
         self.band_cb.set(bool(self.v.get("side_band")))
         self.vst_cb.set(bool(self.v.get("vst_air", False)))
         self.tube_cb.set(bool(self.v.get("tube", False)))
@@ -809,6 +1079,53 @@ class App:
         self._mark_preset(None)
         self.refresh_labels(); self.apply()
 
+    def show_method(self):
+        """另開一頁放方法論。用 Toplevel 而不是分頁：主畫面的版面是量過高度自動收邊的，
+        塞進 Notebook 會把那套邏輯連帶改掉；而且方法論是「偶爾查」，不是「隨時看」。"""
+        if getattr(self, "_meth_win", None) is not None and self._meth_win.winfo_exists():
+            self._meth_win.lift()                 # 已經開著就拉到前面，不要開第二個
+            return
+        w = tk.Toplevel(self.root)
+        self._meth_win = w
+        w.title(f"甜嗓 SweetVox {VERSION} — 方法論")
+        w.configure(bg=BG)
+        w.geometry(f"{int(760 * self.s)}x{int(700 * self.s)}")
+
+        head = tk.Frame(w, bg=BG)
+        head.pack(fill="x", padx=16, pady=(14, 6))
+        tk.Label(head, text="方法論", bg=BG, fg=ACCENT,
+                 font=("Microsoft JhengHei UI", 17, "bold")).pack(side="left")
+        tk.Label(head, text="先證明尺是準的，再拿它量東西", bg=BG, fg=DIM,
+                 font=("Microsoft JhengHei UI", 9)).pack(side="left", padx=(12, 0), pady=(8, 0))
+        tk.Button(head, text="關閉", command=w.destroy, bg=CARD2, fg=TXT,
+                  activebackground=ACCENT, activeforeground="#20131a",
+                  relief="flat", bd=0, padx=14, pady=5).pack(side="right")
+
+        box = tk.Frame(w, bg=CARD)
+        box.pack(fill="both", expand=True, padx=16, pady=(0, 14))
+        sb = tk.Scrollbar(box, orient="vertical")
+        sb.pack(side="right", fill="y")
+        txt = tk.Text(box, bg=CARD, fg=TXT, bd=0, relief="flat", wrap="word",
+                      padx=16, pady=14, spacing1=1, spacing3=3,
+                      yscrollcommand=sb.set, insertwidth=0,
+                      font=("Microsoft JhengHei UI", 10))
+        txt.pack(side="left", fill="both", expand=True)
+        sb.config(command=txt.yview)
+
+        # 大標（【一】…）上色，其餘照原樣 —— 掃一遍比寫 regex 好讀
+        txt.tag_configure("h", foreground=ACCENT,
+                          font=("Microsoft JhengHei UI", 12, "bold"), spacing1=14, spacing3=6)
+        txt.tag_configure("step", foreground=ACCENT2,
+                          font=("Microsoft JhengHei UI", 10, "bold"), spacing1=8)
+        txt.insert("1.0", METHOD_TEXT)
+        for i, line in enumerate(METHOD_TEXT.splitlines(), start=1):
+            if line.startswith("【"):
+                txt.tag_add("h", f"{i}.0", f"{i}.end")
+            elif line.startswith("第 ") and " 步" in line[:6]:
+                txt.tag_add("step", f"{i}.0", f"{i}.end")
+        txt.config(state="disabled")              # 只給看，不給改
+        txt.bind("<MouseWheel>", lambda e: (txt.yview_scroll(-e.delta // 120, "units"), "break")[1])
+
     def export(self):
         try:
             os.makedirs(EXPORT, exist_ok=True)
@@ -816,6 +1133,7 @@ class App:
             with open(p, "w", encoding="utf-8") as f:
                 f.write(build_config(self.v))
             self.measure_lbl.config(text=f"已匯出：{p}")
+            self._fit_window()
         except Exception as e:
             messagebox.showerror("匯出失敗", str(e))
 
@@ -829,6 +1147,7 @@ class App:
     # ---- 實測 ----
     def measure(self):
         self.measure_lbl.config(text="量測中…（請讓音樂繼續播放，約 12 秒）")
+        self._fit_window()
         threading.Thread(target=self._measure_worker, daemon=True).start()
 
     def _measure_worker(self):
@@ -864,7 +1183,7 @@ class App:
                        % (m_off, s_off, d_off, m_now, s_now, d_now, d_now - d_off, dl, -dl))
         except Exception as e:
             msg = f"量測失敗：{e}"
-        self.root.after(0, lambda: self.measure_lbl.config(text=msg))
+        self.root.after(0, lambda: (self.measure_lbl.config(text=msg), self._fit_window()))
         self.root.after(0, self.apply)
 
 if __name__ == "__main__":
